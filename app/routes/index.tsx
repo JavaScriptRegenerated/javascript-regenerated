@@ -35,6 +35,9 @@ export default function Index() {
           <li>
             <a href="/glossary">Glossary</a>
           </li>
+          <li>
+            <a href="/thanks">Thanks</a>
+          </li>
         </ul>
       </nav>
       <p>Message from the loader: {data.message}</p>
