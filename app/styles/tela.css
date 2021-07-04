@@ -5,6 +5,7 @@
   --link--decoration: underline;
   --link--decoration--hover: initial;
   --measure: 44rem;
+  --measure: 24rem;
 }
 
 a {

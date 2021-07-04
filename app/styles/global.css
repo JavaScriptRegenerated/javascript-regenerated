@@ -2,12 +2,18 @@
   outline: none;
 }
 
-body {
-  font-family: sans-serif;
+html {
+  font-size: 200%;
 }
 
-footer {
+body {
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+main {
+  padding-bottom: 4rem;
+}
+
+footer[role="contentinfo"] {
   text-align: center;
-  color: #ccc;
-  padding-top: 80px;
 }

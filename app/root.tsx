@@ -40,7 +40,7 @@ export default function App() {
   return (
     <Document>
       <Outlet />
-      <footer>
+      <footer role="contentinfo">
         <p>This page was rendered at {data.date.toLocaleString()}</p>
       </footer>
     </Document>

@@ -7,5 +7,5 @@ dev_b:
 staging:
 	vercel
 
-prod:
+production:
 	vercel --prod
