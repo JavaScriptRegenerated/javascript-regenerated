@@ -33,7 +33,7 @@ export default function Index() {
             <a href="/make/parser">{'Make a Parser'}</a>
           </li>
           <li>
-            <a href="/make/html">{'Make an HTML & CSS Renderer'}</a>
+            <a href="/make/renderer">{'Make an HTML & CSS Renderer'}</a>
           </li>
           <li>
             <a href="/multiproducers">{'Multi-Producer Components'}</a>

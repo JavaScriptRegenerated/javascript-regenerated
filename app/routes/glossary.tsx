@@ -13,33 +13,39 @@ export let links: LinksFunction = () => {
 };
 
 export let loader: LoaderFunction = async () => {
-  return { message: "this is awesome 😎" };
+  return {};
 };
 
-export default function Index() {
-  let data = useRouteData();
-
+export default function GlossaryPage() {
   return (
     <main data-measure="center">
       <h2>Glossary</h2>
-      <dl>
-        <dt>Send a message</dt>
-        <dd>`yield "abc";`</dd>
-        <dt>Receive a message reply</dt>
-        <dd>`const reply = yield "abc";`</dd>
-        <dt>Return a final message</dt>
-        <dd>`return "final message";</dd>
-        <dt>Message processor accepts certain messages to solve a problem</dt>
-        <dt>A message can be a primitive: string, number, symbol</dt>
-        <dd>`yield "abc";`</dd>
-        <dd>`yield 42;`</dd>
-        <dd>`yield Symbol.for("identifier");`</dd>
-        <dt>A message can be a collection: array, set, map, object</dt>
-        <dd>`yield ["abc", "def"];`</dd>
-        <dt>A message can be another generator function</dt>
-        <dd>`yield OtherGenerator;`</dd>
-      </dl>
-      <p>Message from the loader: {data.message}</p>
+      <pre>
+        <code className="lang-javascript">{`
+function* GenerateSomething() {
+  // Send a message
+  yield "abc";
+
+  // A message can be a primitive: string, number, regex, symbol
+  yield "abc";
+  yield 42;
+  yield /[a-z]+/;
+  yield Symbol.for("identifier");
+
+  // A message can be a collection: array, set, map, object
+  yield ["abc", "def"];
+
+  // A message can be another generator function
+  yield OtherGenerator;
+  
+  // Receive a message reply
+  const reply = yield "abc";
+
+  // Return a final message
+  return "final message";
+}
+        `.trim()}</code>
+      </pre>
     </main>
   );
 }
