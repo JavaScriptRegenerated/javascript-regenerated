@@ -1,10 +1,11 @@
 import type { MetaFunction, LinksFunction, LoaderFunction } from "remix";
 import { useRouteData } from "remix";
+import { parseString } from "../../model/parsing";
 
 export let meta: MetaFunction = () => {
   return {
-    title: "Making a parser: JavaScript Regenerated",
-    description: "Make a parser using generator functions",
+    title: "Renderers: JavaScript Regenerated",
+    description: "One components that renders to many targets",
   };
 };
 
@@ -16,30 +17,45 @@ export let loader: LoaderFunction = async () => {
   return { message: "this is awesome 😎" };
 };
 
-export default function Index() {
+interface AWSRegion {
+  primary: string;
+  secondary: string;
+}
+function* ParseAWSRegion(): Generator<string, AWSRegion, string> {
+  const primary = yield 'us';
+  yield '-';
+  yield 'east';
+  yield '-';
+  yield '1';
+
+  return {
+    primary,
+    secondary: '',
+  };
+}
+
+export default function MakeRenderer() {
   let data = useRouteData();
+
+  const awsRegionResult = parseString('us-east-1', ParseAWSRegion);
+  console.log({ awsRegionResult });
 
   return (
     <main data-measure="center">
-      <h2>Make a Parser</h2>
-      <dl>
-        <dt>Send a message</dt>
-        <dd>`yield "abc";`</dd>
-        <dt>Receive a message reply</dt>
-        <dd>`const reply = yield "abc";`</dd>
-        <dt>Return a final message</dt>
-        <dd>`return "final message";</dd>
-        <dt>Message processor accepts certain messages to solve a problem</dt>
-        <dt>A message can be a primitive: string, number, symbol</dt>
-        <dd>`yield "abc";`</dd>
-        <dd>`yield 42;`</dd>
-        <dd>`yield Symbol.for("identifier");`</dd>
-        <dt>A message can be a collection: array, set, map, object</dt>
-        <dd>`yield ["abc", "def"];`</dd>
-        <dt>A message can be another generator function</dt>
-        <dd>`yield OtherGenerator;`</dd>
-      </dl>
-      <p>Message from the loader: {data.message}</p>
+      <h1>Parser</h1>
+      <pre>
+        <code className="lang-javascript">{parseString.toString()}</code>
+      </pre>
+
+      <h2>AWS Region Parser</h2>
+      <pre>
+        <code className="lang-javascript">{ParseAWSRegion.toString()}</code>
+      </pre>
+
+      <h3>Result</h3>
+      <pre>
+        <code className="lang-json">{JSON.stringify(awsRegionResult, null, 2)}</code>
+      </pre>
     </main>
   );
 }

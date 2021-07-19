@@ -17,9 +17,9 @@ export const out = {
   }),
 };
 
-export type Token = ReturnType<typeof out.html | typeof out.css>;
+export type RenderingMessage = ReturnType<typeof out.html | typeof out.css>;
 
-export function* processHTML(generator: () => Generator<Token, void, void>) {
+export function* processHTML(generator: () => Generator<RenderingMessage, void, void>) {
   const gen = generator();
   while (true) {
     const result = gen.next();
@@ -32,7 +32,7 @@ export function* processHTML(generator: () => Generator<Token, void, void>) {
   }
 }
 
-export function* processCSS(generator: () => Generator<Token, void, void>) {
+export function* processCSS(generator: () => Generator<RenderingMessage, void, void>) {
   const gen = generator();
   while (true) {
     const result = gen.next();
