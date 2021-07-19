@@ -38,7 +38,6 @@ function Document({ children }: { children: React.ReactNode }) {
           rel="stylesheet"
           href="https://unpkg.com/prism-theme-night-owl@1.4.0/build/style.css"
         />
-        <script>window.Prism.highlightAll();</script>
       </head>
       <body>
         {children}

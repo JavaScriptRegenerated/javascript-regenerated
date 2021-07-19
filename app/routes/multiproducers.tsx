@@ -1,5 +1,6 @@
 import type { MetaFunction, LinksFunction, LoaderFunction } from "remix";
 import { useRouteData } from "remix";
+import { out, processHTML, processCSS } from "../model/rendering";
 
 export let meta: MetaFunction = () => {
   return {
@@ -16,57 +17,11 @@ export let loader: LoaderFunction = async () => {
   return { message: "this is awesome 😎" };
 };
 
-const identifiers = {
-  html: "html",
-  cssRule: "cssRule",
-  cssClassName: "cssClassName",
-  image: "image",
-} as const;
-
-const out = {
-  html: (raw: TemplateStringsArray) => ({ type: identifiers.html, raw: raw.raw.join('') }),
-  css: (selector: string, rules: string) => ({
-    type: identifiers.cssRule,
-    selector,
-    rules,
-  }),
-};
-
-type Token = ReturnType<typeof out.html | typeof out.css>;
-
 function* Example() {
   yield out.html`<h1>Hello!</h1>`;
   yield out.html`<p>This is HTML</p>`;
   yield out.css("p", "color: red;");
-}
-
-function* processHTML(generator: () => Generator<Token, void, void>) {
-  const gen = generator();
-  while (true) {
-    const result = gen.next();
-    if (result.done) break;
-
-    if (result.value.type === identifiers.html) {
-      yield result.value.raw;
-      yield "\n";
-    }
-  }
-}
-
-function* processCSS(generator: () => Generator<Token, void, void>) {
-  const gen = generator();
-  while (true) {
-    const result = gen.next();
-    if (result.done) break;
-
-    if (result.value.type === identifiers.cssRule) {
-      yield result.value.selector.replace(/^/, "output ");
-      yield " {";
-      yield result.value.rules;
-      yield "}";
-      yield "\n";
-    }
-  }
+  yield out.css("p:after", "color: blue; content: ' and this is CSS';");
 }
 
 function countByteSize(input: string): number {
@@ -86,7 +41,11 @@ export default function MultiProducers() {
       <h1>Multi Producers</h1>
       <h2>Input</h2>
       <pre>
-        <code className="lang-javascript" contentEditable>
+        <code className="lang-javascript" contentEditable style={{ display: 'block' }} onInput={({ target }) => {
+          if (target instanceof HTMLElement) {
+            (window as any).Prism.highlightElement(target);
+          }
+        }}>
           {Example.toString()}
         </code>
       </pre>
@@ -105,12 +64,15 @@ export default function MultiProducers() {
         </pre>
         <p>CSS: {countByteSize(css)} bytes</p>
       </section>
-      <output className="X" style={{ border: "1px solid black" }}>
-        <blockquote>
-          <style dangerouslySetInnerHTML={{ __html: css }}></style>
-          <div dangerouslySetInnerHTML={{ __html: html }}></div>
-        </blockquote>
-      </output>
+      <section aria-labelledby="preview-heading">
+        <h2 id="preview-heading">Output Preview</h2>
+        <output className="X" style={{ border: "1px solid black" }}>
+          <blockquote>
+            <style dangerouslySetInnerHTML={{ __html: css }}></style>
+            <div dangerouslySetInnerHTML={{ __html: html }}></div>
+          </blockquote>
+        </output>
+      </section>
       <p>Message from the loader: {data.message}</p>
     </main>
   );

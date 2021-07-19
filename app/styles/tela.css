@@ -1,11 +1,25 @@
 :root {
+  --measure: 24rem;
+
+  --text--line-height: 1.25;
+
+  --heading--padding-y: calc(var(--text--line-height) * 1rem);
+
   --link--padding-x: 0;
   --link--padding-y: 0;
   --link--color: var(--theme-primary);
   --link--decoration: underline;
   --link--decoration--hover: initial;
-  --measure: 44rem;
-  --measure: 24rem;
+  
+  --list--style: disc;
+  --list--indent: 1em;
+}
+
+* { margin: 0; }
+
+h1, h2, h3, h4 {
+  padding-top: var(--heading--padding-y);
+  padding-bottom: var(--heading--padding-y);
 }
 
 a {
@@ -19,6 +33,16 @@ a {
 a:hover {
   text-decoration: var(--link--decoration--hover);
   background-color: var(--link--bg--hover);
+}
+
+ul {
+  list-style: var(--list--style);
+  padding-left: var(--list--indent);
+}
+
+nav {
+  --list--style: none;
+  --link--indent: 0;
 }
 
 [data-links~="current-color"] {
@@ -193,6 +217,9 @@ hr[data-y="1/2"] {
 }
 [data-text~="-1"] {
   font-size: var(--size--1);
+}
+[data-text~="center"] {
+  text-align: center;
 }
 [data-text~="bold"] {
   font-weight: bold;

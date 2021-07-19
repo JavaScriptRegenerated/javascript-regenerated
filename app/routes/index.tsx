@@ -22,21 +22,27 @@ export default function Index() {
   let data = useRouteData();
 
   return (
-    <main data-measure="center">
-      <h2>JavaScript Regenerated</h2>
+    <main data-measure="center" data-text="center">
+      <h1>JavaScript Regenerated</h1>
       <nav>
-        <ul>
+        <ul className="">
           <li>
-            <a href="/generator-functions-vs-classes">Generator Functions vs Classes</a>
+            <a href="/generator-functions-vs-classes">{'Generator Functions vs Classes'}</a>
           </li>
           <li>
-            <a href="/make/parser">Make a Parser</a>
+            <a href="/make/parser">{'Make a Parser'}</a>
           </li>
           <li>
-            <a href="/glossary">Glossary</a>
+            <a href="/make/html">{'Make an HTML & CSS Renderer'}</a>
           </li>
           <li>
-            <a href="/thanks">Thanks</a>
+            <a href="/multiproducers">{'Multi-Producer Components'}</a>
+          </li>
+          <li>
+            <a href="/glossary">{'Glossary'}</a>
+          </li>
+          <li>
+            <a href="/thanks">{'Thanks'}</a>
           </li>
         </ul>
       </nav>
