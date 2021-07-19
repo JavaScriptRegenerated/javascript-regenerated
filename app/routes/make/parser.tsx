@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import type { MetaFunction, LinksFunction, LoaderFunction } from "remix";
 import { useRouteData } from "remix";
 import { parseString } from "../../model/parsing";
@@ -20,25 +21,59 @@ export let loader: LoaderFunction = async () => {
 interface AWSRegion {
   primary: string;
   secondary: string;
+  digit: number;
 }
-function* ParseAWSRegion(): Generator<string, AWSRegion, string> {
-  const primary = yield 'us';
-  yield '-';
-  yield 'east';
-  yield '-';
-  yield '1';
+function* ParseAWSRegion(): Generator<
+  string | string[] | number[],
+  AWSRegion,
+  any
+> {
+  const primary = yield ["us-gov", "us", "af", "ap", "ca", "eu", "cn", "me", "sa"];
+  yield "-";
+  const secondary = yield [
+    "northeast",
+    "northwest",
+    "southeast",
+    "central",
+    "north",
+    "east",
+    "west",
+    "south",
+  ];
+  yield "-";
+  const digit = yield [1, 2, 3];
 
   return {
     primary,
-    secondary: '',
+    secondary,
+    digit,
+  };
+}
+
+function X(spacing?: number) {
+  return {
+    className: "X",
+    style: {
+      "--X-spacing": `${spacing}rem`,
+    } as CSSProperties,
   };
 }
 
 export default function MakeRenderer() {
-  let data = useRouteData();
-
-  const awsRegionResult = parseString('us-east-1', ParseAWSRegion);
-  console.log({ awsRegionResult });
+  function renderExample(input: string): JSX.Element {
+    return (
+      <div {...X(2)}>
+        <p>{input}</p>
+        <div>
+          <pre>
+            <code className="lang-json">
+              {JSON.stringify(parseString(input, ParseAWSRegion), null, 2)}
+            </code>
+          </pre>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <main data-measure="center">
@@ -52,10 +87,12 @@ export default function MakeRenderer() {
         <code className="lang-javascript">{ParseAWSRegion.toString()}</code>
       </pre>
 
-      <h3>Result</h3>
-      <pre>
-        <code className="lang-json">{JSON.stringify(awsRegionResult, null, 2)}</code>
-      </pre>
+      <h3>Results</h3>
+      {renderExample("us-west-1")}
+      {renderExample("ap-southeast-2")}
+      {renderExample("xx-east-1")}
+      {renderExample("eu-west-3")}
+      {renderExample("us-gov-west-1")}
     </main>
   );
 }

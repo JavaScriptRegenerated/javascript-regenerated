@@ -7,15 +7,16 @@ html {
   color: #D9FFFF;
   background-color: #00151C;
 }
-
 body {
   font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
-
 main {
   padding-bottom: 4rem;
 }
-
 footer[role="contentinfo"] {
   text-align: center;
+}
+
+pre[class*=language-] {
+  font-size: 0.875rem;
 }

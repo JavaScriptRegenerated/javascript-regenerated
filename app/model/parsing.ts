@@ -17,58 +17,64 @@ export const out = {
   }),
 };
 
-export type ParsingMessage = string | RegExp;
+export type ParsingMessage = string | number | RegExp | Array<string | number | RegExp>;
+export type ParsingReply = string | number | RegExpMatchArray | undefined;
 
 export function parseString<Result>(
   input: string,
   generator: () => Generator<
     ParsingMessage,
     Result,
-    string | RegExpMatchArray | undefined
+    ParsingReply
   >
 ) {
-  let lastResult: string | RegExpMatchArray | undefined;
+  let reply: ParsingReply;
 
   const gen = generator();
-  while (true) {
-    const result = gen.next(lastResult);
+  mainLoop: while (true) {
+    const result = gen.next(reply);
     if (result.done) {
       return Object.freeze({
         success: true,
-        remaining: input,
         result: result.value,
+        remaining: input,
       });
     }
 
-    const matcher = result.value;
-    if (typeof matcher === "string") {
-      let found = false;
-      const newInput = input.replace(matcher, (_1, offset: number) => {
-        found = offset === 0;
-        return "";
-      });
-      if (found) {
-        lastResult = matcher;
-        input = newInput;
-        continue;
-      }
-    } else if (matcher instanceof RegExp) {
-      if (["^", "$"].includes(matcher.source[0]) === false) {
-        throw new Error(`Regex must be from start: ${matcher}`);
-      }
-      const match = input.match(matcher);
-      if (match) {
-        lastResult = match;
-        // input = input.replace(item, '');
-        input = input.slice(match[0].length);
-        continue;
+    const message = result.value;
+    const matchers = new Array<ParsingMessage>().concat(message);
+
+    for (let matcher of matchers) {
+      if (typeof matcher === "string" || typeof matcher === 'number') {
+          const searchString = matcher.toString()
+        let found = false;
+        const newInput = input.replace(searchString, (_1, offset: number) => {
+          found = offset === 0;
+          return "";
+        });
+        if (found) {
+          reply = matcher;
+          input = newInput;
+          continue mainLoop;
+        }
+      } else if (matcher instanceof RegExp) {
+        if (["^", "$"].includes(matcher.source[0]) === false) {
+          throw new Error(`Regex must be from start: ${matcher}`);
+        }
+        const match = input.match(matcher);
+        if (match) {
+          reply = match;
+          // input = input.replace(item, '');
+          input = input.slice(match[0].length);
+          continue mainLoop;
+        }
       }
     }
 
     return Object.freeze({
       success: false,
+      failedOnMessage: message,
       remaining: input,
-      failedOnMessage: matcher,
     });
   }
 }
