@@ -1,4 +1,5 @@
 import type { MetaFunction, LinksFunction, LoaderFunction } from "remix";
+import { Link } from "remix";
 import { useRouteData } from "remix";
 
 import stylesUrl from "../styles/index.css";
@@ -25,22 +26,22 @@ export default function Index() {
       <nav>
         <ul>
           <li>
-            <a href="/generator-functions-vs-classes">{'Generator Functions vs Classes'}</a>
+            <Link to="/generator-functions-vs-classes">{'Generator Functions vs Classes'}</Link>
           </li>
           <li>
-            <a href="/make/parser">{'Make a Parser'}</a>
+            <Link to="/make/parser">{'Make a Parser'}</Link>
           </li>
           <li>
-            <a href="/make/renderer">{'Make an HTML & CSS Renderer'}</a>
+            <Link to="/make/renderer">{'Make an HTML & CSS Renderer'}</Link>
           </li>
           <li>
-            <a href="/multiproducers">{'Multi-Producer Components'}</a>
+            <Link to="/multiproducers">{'Multi-Producer Components'}</Link>
           </li>
           <li>
-            <a href="/glossary">{'Glossary'}</a>
+            <Link to="/glossary">{'Glossary'}</Link>
           </li>
           <li>
-            <a href="/thanks">{'Thanks'}</a>
+            <Link to="/thanks">{'Thanks'}</Link>
           </li>
         </ul>
       </nav>
