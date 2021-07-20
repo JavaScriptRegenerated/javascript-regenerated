@@ -1,7 +1,7 @@
-import type { CSSProperties } from "react";
+import React from "react";
 import type { MetaFunction, LinksFunction, LoaderFunction } from "remix";
-import { useRouteData } from "remix";
 import { parseString } from "../../model/parsing";
+import { X } from "../../view/structure";
 
 export let meta: MetaFunction = () => {
   return {
@@ -28,7 +28,17 @@ function* ParseAWSRegion(): Generator<
   AWSRegion,
   any
 > {
-  const primary = yield ["us-gov", "us", "af", "ap", "ca", "eu", "cn", "me", "sa"];
+  const primary = yield [
+    "us-gov",
+    "us",
+    "af",
+    "ap",
+    "ca",
+    "eu",
+    "cn",
+    "me",
+    "sa",
+  ];
   yield "-";
   const secondary = yield [
     "northeast",
@@ -50,13 +60,17 @@ function* ParseAWSRegion(): Generator<
   };
 }
 
-function X(spacing?: number) {
-  return {
-    className: "X",
-    style: {
-      "--X-spacing": `${spacing}rem`,
-    } as CSSProperties,
-  };
+function LabelledSection(props: {
+  id: string;
+  heading: JSX.Element;
+  children: React.ReactNode;
+}): JSX.Element {
+  return (
+    <section id={props.id}>
+      {React.cloneElement(props.heading, { "aria-labelledby": props.id })}
+      {props.children}
+    </section>
+  );
 }
 
 export default function MakeRenderer() {
@@ -82,17 +96,25 @@ export default function MakeRenderer() {
         <code className="lang-javascript">{parseString.toString()}</code>
       </pre>
 
-      <h2>AWS Region Parser</h2>
-      <pre>
-        <code className="lang-javascript">{ParseAWSRegion.toString()}</code>
-      </pre>
+      <LabelledSection
+        id="aws-region-parser"
+        heading={<h2>AWS Region Parser</h2>}
+      >
+        <pre>
+          <code className="lang-javascript">{ParseAWSRegion.toString()}</code>
+        </pre>
 
-      <h3>Results</h3>
-      {renderExample("us-west-1")}
-      {renderExample("ap-southeast-2")}
-      {renderExample("xx-east-1")}
-      {renderExample("eu-west-3")}
-      {renderExample("us-gov-west-1")}
+        <LabelledSection
+          id="aws-region-parser-results"
+          heading={<h3>Results</h3>}
+        >
+          {renderExample("us-west-1")}
+          {renderExample("ap-southeast-2")}
+          {renderExample("xx-east-1")}
+          {renderExample("eu-west-3")}
+          {renderExample("us-gov-west-1")}
+        </LabelledSection>
+      </LabelledSection>
     </main>
   );
 }
