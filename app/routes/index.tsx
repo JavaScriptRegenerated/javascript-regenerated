@@ -35,6 +35,9 @@ export default function Index() {
             <Link to="/make/renderer">{'Make an HTML & CSS Renderer'}</Link>
           </li>
           <li>
+            <Link to="/make/schema">{'Make a Schema validator'}</Link>
+          </li>
+          <li>
             <Link to="/multiproducers">{'Multi-Producer Components'}</Link>
           </li>
           <li>
