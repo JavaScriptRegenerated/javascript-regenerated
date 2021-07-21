@@ -21,7 +21,7 @@ export const identifiers = {
   number: "number",
 } as const;
 
-export const out = {
+export const read = {
   string: (name: string) => ({
     type: identifiers.string,
     name,
@@ -32,7 +32,7 @@ export const out = {
   }),
 };
 
-type SchemaMessage = ReturnType<typeof out.string | typeof out.number>;
+type SchemaMessage = ReturnType<typeof read.string | typeof read.number>;
 type SchemaReply = string | number;
 type SchemaGenerator<Result> = Generator<SchemaMessage, Result, any>;
 
@@ -41,23 +41,23 @@ export function parseSchema<Result>(
   generator: () => SchemaGenerator<Result>
 ) {
   const gen = generator();
-  let value: SchemaReply | undefined;
+  let reply: SchemaReply | undefined;
 
   while (true) {
-    const result = gen.next(value ?? "");
+    const result = gen.next(reply ?? "");
     if (result.done) {
       return result.value;
     }
 
-    value = undefined;
+    reply = undefined;
 
     if (result.value.type === identifiers.string) {
       if (typeof source[result.value.name] === "string") {
-        value = source[result.value.name];
+        reply = source[result.value.name];
       }
     } else if (result.value.type === identifiers.number) {
       if (typeof source[result.value.name] === "number") {
-        value = source[result.value.name];
+        reply = source[result.value.name];
       }
     }
   }
@@ -69,9 +69,9 @@ interface AWSRegion {
   digit: number;
 }
 function* AWSRegionSchema(): SchemaGenerator<AWSRegion> {
-  const primary = yield out.string("primary");
-  const secondary = yield out.string("secondary");
-  const digit = yield out.number("digit");
+  const primary = yield read.string("primary");
+  const secondary = yield read.string("secondary");
+  const digit = yield read.number("digit");
 
   return {
     primary,
@@ -83,7 +83,6 @@ function* AWSRegionSchema(): SchemaGenerator<AWSRegion> {
 export default function MakeRenderer() {
   function renderExample(input: any): JSX.Element {
     const result = parseSchema(input, AWSRegionSchema);
-    console.log({ result });
 
     return (
       <div {...X(2)}>
