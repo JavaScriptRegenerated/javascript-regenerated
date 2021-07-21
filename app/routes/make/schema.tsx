@@ -34,7 +34,8 @@ export const read = {
 
 type SchemaMessage = ReturnType<typeof read.string | typeof read.number>;
 type SchemaReply = string | number;
-type SchemaGenerator<Result> = Generator<SchemaMessage, Result, any>;
+// type SchemaGenerator<Result> = Generator<ReturnType<typeof read.string>, Result, string> | Generator<ReturnType<typeof read.number>, Result, number>;
+type SchemaGenerator<Result> = Generator<SchemaMessage, Result, SchemaReply | any>;
 
 export function parseSchema<Result>(
   source: Record<string, any>,
@@ -44,7 +45,7 @@ export function parseSchema<Result>(
   let reply: SchemaReply | undefined;
 
   while (true) {
-    const result = gen.next(reply ?? "");
+    const result = gen.next(reply ?? "" as any);
     if (result.done) {
       return result.value;
     }
@@ -69,9 +70,9 @@ interface AWSRegion {
   digit: number;
 }
 function* AWSRegionSchema(): SchemaGenerator<AWSRegion> {
-  const primary = yield read.string("primary");
-  const secondary = yield read.string("secondary");
-  const digit = yield read.number("digit");
+  const primary: string = yield read.string("primary");
+  const secondary: string = yield read.string("secondary");
+  const digit: number = yield read.number("digit");
 
   return {
     primary,
