@@ -1,6 +1,6 @@
 import React from "react";
 
-export function LabelledSection(props: {
+export function NamedSection(props: {
   id: string;
   heading: JSX.Element;
   children: React.ReactNode;

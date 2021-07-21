@@ -55,6 +55,11 @@ export default function App() {
     <Document>
       <Outlet />
       <footer role="contentinfo">
+        <nav>
+          <ul>
+            <li><a href="/">Home</a></li>
+          </ul>
+        </nav>
         <p>This page was rendered at {data.date.toLocaleString()}</p>
       </footer>
     </Document>

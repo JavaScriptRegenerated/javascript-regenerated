@@ -1,6 +1,7 @@
 import React from "react";
 import type { MetaFunction, LinksFunction, LoaderFunction } from "remix";
 import { parseString } from "../../model/parsing";
+import { NamedSection } from "../../view/semantics";
 import { X } from "../../view/structure";
 
 export let meta: MetaFunction = () => {
@@ -60,19 +61,6 @@ function* ParseAWSRegion(): Generator<
   };
 }
 
-function LabelledSection(props: {
-  id: string;
-  heading: JSX.Element;
-  children: React.ReactNode;
-}): JSX.Element {
-  return (
-    <section id={props.id}>
-      {React.cloneElement(props.heading, { "aria-labelledby": props.id })}
-      {props.children}
-    </section>
-  );
-}
-
 export default function MakeRenderer() {
   function renderExample(input: string): JSX.Element {
     return (
@@ -96,7 +84,7 @@ export default function MakeRenderer() {
         <code className="lang-javascript">{parseString.toString()}</code>
       </pre>
 
-      <LabelledSection
+      <NamedSection
         id="aws-region-parser"
         heading={<h2>AWS Region Parser</h2>}
       >
@@ -104,17 +92,13 @@ export default function MakeRenderer() {
           <code className="lang-javascript">{ParseAWSRegion.toString()}</code>
         </pre>
 
-        <LabelledSection
-          id="aws-region-parser-results"
-          heading={<h3>Results</h3>}
-        >
-          {renderExample("us-west-1")}
-          {renderExample("ap-southeast-2")}
-          {renderExample("xx-east-1")}
-          {renderExample("eu-west-3")}
-          {renderExample("us-gov-west-1")}
-        </LabelledSection>
-      </LabelledSection>
+        <h3>Results</h3>
+        {renderExample("us-west-1")}
+        {renderExample("ap-southeast-2")}
+        {renderExample("xx-east-1")}
+        {renderExample("eu-west-3")}
+        {renderExample("us-gov-west-1")}
+      </NamedSection>
     </main>
   );
 }

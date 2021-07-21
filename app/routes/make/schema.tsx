@@ -1,5 +1,6 @@
 import type { MetaFunction, LinksFunction, LoaderFunction } from "remix";
 import { X } from "../../view/structure";
+import { NamedSection } from "../../view/semantics";
 
 export let meta: MetaFunction = () => {
   return {
@@ -105,13 +106,17 @@ export default function MakeRenderer() {
         <code className="lang-javascript">{parseSchema.toString()}</code>
       </pre>
 
-      <h2>AWS Region Schema</h2>
-      <pre>
-        <code className="lang-javascript">{AWSRegionSchema.toString()}</code>
-      </pre>
+      <NamedSection
+        id="aws-region-schema"
+        heading={<h2>AWS Region Schema</h2>}
+      >
+        <pre>
+          <code className="lang-javascript">{AWSRegionSchema.toString()}</code>
+        </pre>
 
-      <h3>Results</h3>
-      {renderExample({ primary: "us", secondary: "east", digit: 1 })}
+        <h3>Results</h3>
+        {renderExample({ primary: "us", secondary: "east", digit: 1 })}
+      </NamedSection>
     </main>
   );
 }
