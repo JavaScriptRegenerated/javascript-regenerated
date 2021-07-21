@@ -8,3 +8,12 @@ export function X(spacing?: number) {
     } as CSSProperties,
   };
 }
+
+export function Y(spacing?: number) {
+  return {
+    className: "Y",
+    style: {
+      "--Y-spacing": `${spacing}rem`,
+    } as CSSProperties,
+  };
+}
