@@ -3,6 +3,8 @@ import { X, Y } from "../../view/structure";
 import { NamedSection } from "../../view/semantics";
 import { useRef } from "react";
 import { useState } from "react";
+import { useEffect } from "react";
+import { parseFormData, parseSchema, read, SchemaGenerator } from "../../model/schemas";
 
 export let meta: MetaFunction = () => {
   return {
@@ -19,83 +21,22 @@ export let loader: LoaderFunction = async () => {
   return {};
 };
 
-export const identifiers = {
-  string: "string",
-  number: "number",
-} as const;
+function useFetch<Data>(source: URL): null | Data {
+  const [data, setData] = useState<Data | null>(null);
 
-export const read = {
-  string: (name: string) => ({
-    type: identifiers.string,
-    name,
-  }),
-  number: (name: string) => ({
-    type: identifiers.number,
-    name,
-  }),
-};
+  useEffect(() => {
+    console.log("Fetching");
+    const controller = new AbortController();
+    const signal = controller.signal;
 
-type SchemaMessage = ReturnType<typeof read.string | typeof read.number>;
-type SchemaReply = string | number;
-// type SchemaGenerator<Result> = Generator<ReturnType<typeof read.string>, Result, string> | Generator<ReturnType<typeof read.number>, Result, number>;
-type SchemaGenerator<Result> = Generator<
-  SchemaMessage,
-  Result,
-  SchemaReply | any
->;
-
-export function parseSchema<Result>(
-  source: Record<string, any>,
-  generator: () => SchemaGenerator<Result>
-) {
-  const gen = generator();
-  let reply: SchemaReply | undefined;
-
-  while (true) {
-    const result = gen.next(reply ?? ("" as any));
-    if (result.done) {
-      return result.value;
+    if (source instanceof URL) {
+      fetch(source.toString(), { signal }).then(res => res.json()).then((data) => setData(data));
     }
 
-    reply = undefined;
+    return () => controller.abort();
+  }, [source.toString()]);
 
-    if (result.value.type === identifiers.string) {
-      if (typeof source[result.value.name] === "string") {
-        reply = source[result.value.name];
-      }
-    } else if (result.value.type === identifiers.number) {
-      if (typeof source[result.value.name] === "number") {
-        reply = source[result.value.name];
-      }
-    }
-  }
-}
-
-export function parseFormData<Result>(
-  source: FormData,
-  generator: () => SchemaGenerator<Result>
-) {
-  const gen = generator();
-  let reply: SchemaReply | undefined;
-
-  while (true) {
-    const result = gen.next(reply ?? ("" as any));
-    if (result.done) {
-      return result.value;
-    }
-
-    reply = undefined;
-
-    if (result.value.type === identifiers.string) {
-      if (source.has(result.value.name)) {
-        reply = source.get(result.value.name) as string;
-      }
-    } else if (result.value.type === identifiers.number) {
-      if (source.has(result.value.name)) {
-        reply = parseFloat(source.get(result.value.name) as string);
-      }
-    }
-  }
+  return data;
 }
 
 interface AWSRegion {
@@ -149,6 +90,8 @@ export default function MakeRenderer() {
     favoriteNumber: 7,
   });
 
+  const personData = useFetch(new URL(`https://swapi.py4e.com/api/people/1`));
+
   return (
     <main data-measure="center">
       <h1>Schema</h1>
@@ -193,6 +136,15 @@ export default function MakeRenderer() {
         <pre>
           <code className="lang-json">
             {JSON.stringify(profileData, null, 2)}
+          </code>
+        </pre>
+      </NamedSection>
+
+      <NamedSection id="fetched-data" heading={<h2>Fetched Data</h2>}>
+        <h3>Results</h3>
+        <pre data-text="-2">
+          <code className="lang-json">
+            {JSON.stringify(personData, null, 2)}
           </code>
         </pre>
       </NamedSection>

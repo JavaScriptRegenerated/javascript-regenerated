@@ -24,6 +24,7 @@ interface AWSRegion {
   secondary: string;
   digit: number;
 }
+// https://docs.aws.amazon.com/directoryservice/latest/admin-guide/regions.html
 function* ParseAWSRegion(): Generator<
   string | string[] | number[],
   AWSRegion,

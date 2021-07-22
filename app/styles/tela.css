@@ -213,10 +213,13 @@ hr[data-y="1/2"] {
   line-height: var(--text--line-height, 1.25);
 }
 [data-text~="0"] {
-  font-size: var(--size-0);
+  font-size: var(--size-0) !important;
 }
 [data-text~="-1"] {
-  font-size: var(--size--1);
+  font-size: var(--size--1) !important;
+}
+[data-text~="-2"] {
+  font-size: var(--size--2) !important;
 }
 [data-text~="center"] {
   text-align: center;
