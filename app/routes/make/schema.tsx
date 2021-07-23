@@ -1,10 +1,15 @@
 import type { MetaFunction, LinksFunction, LoaderFunction } from "remix";
 import { X, Y } from "../../view/structure";
 import { NamedSection } from "../../view/semantics";
-import { useRef } from "react";
+import { CodeBlock } from "../../view/code";
 import { useState } from "react";
 import { useEffect } from "react";
-import { parseFormData, parseSchema, read, SchemaGenerator } from "../../model/schemas";
+import {
+  parseFormData,
+  parseSchema,
+  read,
+  SchemaGenerator,
+} from "../../model/schemas";
 
 export let meta: MetaFunction = () => {
   return {
@@ -30,7 +35,9 @@ function useFetch<Data>(source: URL): null | Data {
     const signal = controller.signal;
 
     if (source instanceof URL) {
-      fetch(source.toString(), { signal }).then(res => res.json()).then((data) => setData(data));
+      fetch(source.toString(), { signal })
+        .then((res) => res.json())
+        .then((data) => setData(data));
     }
 
     return () => controller.abort();
@@ -77,9 +84,9 @@ export default function MakeRenderer() {
     return (
       <div {...X(2)}>
         <div>
-          <pre>
-            <code className="lang-json">{JSON.stringify(result, null, 2)}</code>
-          </pre>
+          <CodeBlock language="json">
+            {JSON.stringify(result, null, 2)}
+          </CodeBlock>
         </div>
       </div>
     );
@@ -97,56 +104,59 @@ export default function MakeRenderer() {
       <h1>Schema</h1>
 
       <h2>JSON</h2>
-      <pre>
-        <code className="lang-javascript">{parseSchema.toString()}</code>
-      </pre>
+      <CodeBlock language="javascript">{parseSchema.toString()}</CodeBlock>
 
       <h2>Form Data</h2>
-      <pre>
-        <code className="lang-javascript">{parseFormData.toString()}</code>
-      </pre>
+      <CodeBlock language="javascript">{parseFormData.toString()}</CodeBlock>
 
       <NamedSection id="aws-region-schema" heading={<h2>AWS Region Schema</h2>}>
-        <pre>
-          <code className="lang-javascript">{AWSRegionSchema.toString()}</code>
-        </pre>
+        <CodeBlock language="javascript">
+          {AWSRegionSchema.toString()}
+        </CodeBlock>
 
         <h3>Results</h3>
         {renderExample({ primary: "us", secondary: "east", digit: 1 })}
       </NamedSection>
 
       <NamedSection id="profile-form" heading={<h2>Profile Form</h2>}>
-        <pre>
-          <code className="lang-javascript">{ProfileSchema.toString()}</code>
-        </pre>
+        <CodeBlock language="javascript">{ProfileSchema.toString()}</CodeBlock>
 
         <h3>Interactive Preview</h3>
-        <form {...Y(1)} onChange={(event) => {
-          setProfileData(parseFormData(new FormData(event.currentTarget), ProfileSchema))
-        }}>
+        <form
+          {...Y(1)}
+          onChange={(event) => {
+            setProfileData(
+              parseFormData(new FormData(event.currentTarget), ProfileSchema)
+            );
+          }}
+        >
           <label>
             <div>Bio:</div>
-            <textarea name="bio" rows={5} defaultValue={profileData.bio}></textarea>
+            <textarea
+              name="bio"
+              rows={5}
+              defaultValue={profileData.bio}
+            ></textarea>
           </label>
           <label>
             <div>Favorite number:</div>
-            <input name="favoriteNumber" type="number" defaultValue={profileData.favoriteNumber} />
+            <input
+              name="favoriteNumber"
+              type="number"
+              defaultValue={profileData.favoriteNumber}
+            />
           </label>
         </form>
-        <pre>
-          <code className="lang-json">
-            {JSON.stringify(profileData, null, 2)}
-          </code>
-        </pre>
+        <CodeBlock language="json">
+          {JSON.stringify(profileData, null, 2)}
+        </CodeBlock>
       </NamedSection>
 
       <NamedSection id="fetched-data" heading={<h2>Fetched Data</h2>}>
         <h3>Results</h3>
-        <pre data-text="-2">
-          <code className="lang-json">
-            {JSON.stringify(personData, null, 2)}
-          </code>
-        </pre>
+        <CodeBlock language="json">
+          {JSON.stringify(personData, null, 2)}
+        </CodeBlock>
       </NamedSection>
     </main>
   );

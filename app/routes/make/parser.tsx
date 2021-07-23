@@ -62,11 +62,17 @@ function* ParseAWSRegion(): Generator<
   };
 }
 
-export default function MakeRenderer() {
+function AWSRegionSection(): JSX.Element {
   function renderExample(input: string): JSX.Element {
     return (
       <div {...X(2)}>
-        <p>{input}</p>
+        <div>
+          <pre>
+            <code className="lang-javascript">
+              {`parseString(\n  "${input}",\n  ParseAWSRegion\n)`}
+            </code>
+          </pre>
+        </div>
         <div>
           <pre>
             <code className="lang-json">
@@ -79,27 +85,30 @@ export default function MakeRenderer() {
   }
 
   return (
+    <NamedSection id="aws-region-parser" heading={<h2>AWS Region Parser</h2>}>
+      <pre>
+        <code className="lang-javascript">{ParseAWSRegion.toString()}</code>
+      </pre>
+
+      <h3>Results</h3>
+      {renderExample("us-west-1")}
+      {renderExample("ap-southeast-2")}
+      {renderExample("xx-east-1")}
+      {renderExample("eu-west-3")}
+      {renderExample("us-gov-west-1")}
+    </NamedSection>
+  );
+}
+
+export default function MakeRenderer() {
+  return (
     <main data-measure="center">
       <h1>Parser</h1>
       <pre>
         <code className="lang-javascript">{parseString.toString()}</code>
       </pre>
 
-      <NamedSection
-        id="aws-region-parser"
-        heading={<h2>AWS Region Parser</h2>}
-      >
-        <pre>
-          <code className="lang-javascript">{ParseAWSRegion.toString()}</code>
-        </pre>
-
-        <h3>Results</h3>
-        {renderExample("us-west-1")}
-        {renderExample("ap-southeast-2")}
-        {renderExample("xx-east-1")}
-        {renderExample("eu-west-3")}
-        {renderExample("us-gov-west-1")}
-      </NamedSection>
+      <AWSRegionSection />
     </main>
   );
 }
