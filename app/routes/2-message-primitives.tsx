@@ -1,6 +1,4 @@
 import type { MetaFunction, LinksFunction, LoaderFunction } from "remix";
-import * as React from "react";
-import { useRouteData } from "remix";
 import {
   loadHeroIcons,
   loadSimpleIcons,
@@ -10,7 +8,7 @@ import { CodeBlock } from "../view/code";
 
 export let meta: MetaFunction = () => {
   return {
-    title: "Linear Reasoning: JavaScript Regenerated",
+    title: "Message Primitives: JavaScript Regenerated",
     description: "",
   };
 };
@@ -102,27 +100,27 @@ function MessagePrimitivesCode() {
     <CodeBlock language="javascript">
       {`
 function* GenerateSomething() {
-// Send a message.
-yield "abc";
+  // Send a message.
+  yield "abc";
 
-// A message can be a primitive: string, number, regex, symbol.
-yield "abc";
-yield 42;
-yield /[a-z]+/;
-yield Symbol.for("identifier");
+  // A message can be a primitive: string, number, regex, symbol.
+  yield "abc";
+  yield 42;
+  yield /[a-z]+/;
+  yield Symbol.for("identifier");
 
-// A message can be a collection: array, set, map, object.
-yield ["abc", "def"];
+  // A message can be a collection: array, set, map, object.
+  yield ["abc", "def"];
 
-// A message can be another generator function.
-yield OtherGenerator;
+  // A message can be another generator function.
+  yield OtherGenerator;
 
-// Receive a message reply.
-const reply = yield "abc";
+  // Receive a message reply.
+  const reply = yield "abc";
 
-// Return a final message.
-// You can use the result of replies!
-return { a: "final message", b: result };
+  // Return a final message.
+  // You can use the result of replies!
+  return { a: "final message", b: result };
 }
 `.trim()}
     </CodeBlock>
