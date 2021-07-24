@@ -2,6 +2,7 @@ import React from "react";
 import type { MetaFunction, LinksFunction, LoaderFunction } from "remix";
 import { parseString } from "../../model/parsing";
 import { NamedSection } from "../../view/semantics";
+import { CodeBlock } from "../../view/code";
 import { X } from "../../view/structure";
 
 export let meta: MetaFunction = () => {
@@ -67,18 +68,14 @@ function AWSRegionSection(): JSX.Element {
     return (
       <div {...X(2)}>
         <div>
-          <pre>
-            <code className="lang-javascript">
-              {`parseString(\n  "${input}",\n  ParseAWSRegion\n)`}
-            </code>
-          </pre>
+          <CodeBlock language="javascript">
+            {`parseString(\n  "${input}",\n  ParseAWSRegion\n)`}
+          </CodeBlock>
         </div>
         <div>
-          <pre>
-            <code className="lang-json">
-              {JSON.stringify(parseString(input, ParseAWSRegion), null, 2)}
-            </code>
-          </pre>
+          <CodeBlock language="json">
+            {JSON.stringify(parseString(input, ParseAWSRegion), null, 2)}
+          </CodeBlock>
         </div>
       </div>
     );
@@ -86,9 +83,7 @@ function AWSRegionSection(): JSX.Element {
 
   return (
     <NamedSection id="aws-region-parser" heading={<h2>AWS Region Parser</h2>}>
-      <pre>
-        <code className="lang-javascript">{ParseAWSRegion.toString()}</code>
-      </pre>
+      <CodeBlock language="javascript">{ParseAWSRegion.toString()}</CodeBlock>
 
       <h3>Results</h3>
       {renderExample("us-west-1")}
@@ -104,9 +99,7 @@ export default function MakeRenderer() {
   return (
     <main data-measure="center">
       <h1>Parser</h1>
-      <pre>
-        <code className="lang-javascript">{parseString.toString()}</code>
-      </pre>
+      <CodeBlock language="javascript">{parseString.toString()}</CodeBlock>
 
       <AWSRegionSection />
     </main>

@@ -1,6 +1,7 @@
 import type { MetaFunction, LinksFunction, LoaderFunction } from "remix";
 import { useRouteData } from "remix";
 import { processHTML, processCSS } from "../../model/rendering";
+import { CodeBlock } from "../../view/code";
 
 export let meta: MetaFunction = () => {
   return {
@@ -24,14 +25,10 @@ export default function MakeRenderer() {
     <main data-measure="center">
       <h1>Renderers</h1>
       <h2>HTML</h2>
-      <pre>
-        <code className="lang-javascript">{processHTML.toString()}</code>
-      </pre>
+      <CodeBlock language="javascript">{processHTML.toString()}</CodeBlock>
 
       <h2>CSS</h2>
-      <pre>
-        <code className="lang-javascript">{processCSS.toString()}</code>
-      </pre>
+      <CodeBlock language="javascript">{processCSS.toString()}</CodeBlock>
       <p>Message from the loader: {data.message}</p>
     </main>
   );

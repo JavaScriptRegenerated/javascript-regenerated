@@ -1,5 +1,6 @@
 import type { MetaFunction, LinksFunction, LoaderFunction } from "remix";
 import { useRouteData } from "remix";
+import { CodeBlock } from "../view/code";
 
 export let meta: MetaFunction = () => {
   return {
@@ -20,8 +21,8 @@ export default function GlossaryPage() {
   return (
     <main data-measure="center">
       <h2>Glossary</h2>
-      <pre>
-        <code className="lang-javascript">{`
+      <CodeBlock language="javascript">
+        {`
 function* GenerateSomething() {
   // Send a message
   yield "abc";
@@ -44,8 +45,8 @@ function* GenerateSomething() {
   // Return a final message
   return "final message";
 }
-        `.trim()}</code>
-      </pre>
+        `.trim()}
+      </CodeBlock>
     </main>
   );
 }
