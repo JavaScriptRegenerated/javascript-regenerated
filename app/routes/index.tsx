@@ -35,8 +35,10 @@ export default function Index() {
   return (
     <main data-measure="center" data-text="center">
       <h1>JavaScript Regenerated</h1>
-      <LoadedIcon name="solid/chat-alt-2.svg" width={120} height={120} fill="currentColor" />
-      <h2>Make Components using Message Generators</h2>
+      <div style={{ color: "white" }}>
+        <LoadedIcon name="solid/chat-alt-2.svg" width={120} height={120} />
+        <h2 style={{ paddingTop: "0rem" }}>Make Components using <br /> Message Generators</h2>
+      </div>
       <PrimaryNavigation />
     </main>
   );
