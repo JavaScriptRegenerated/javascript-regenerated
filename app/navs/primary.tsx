@@ -22,9 +22,6 @@ export function PrimaryNavigation() {
     <nav>
       <ul>
         <li>
-          <Link to="/0-javascript-everywhere">{"JavaScript is everywhere"}</Link>
-        </li>
-        <li>
           <Link to="/1-linear">{"Linear thinking"}</Link>
         </li>
         <li>
@@ -60,7 +57,13 @@ export function PrimaryNavigation() {
         {makeNavItems}
         <li role="separator" data-y="1" />
         <li>
-          <Link to="/5-function-of">{"More than the view"}</Link>
+          <Link to="/4-function-of">{"More than the view"}</Link>
+        </li>
+        <li>
+          <Link to="/0-javascript-everywhere">{"JavaScript is everywhere"}</Link>
+        </li>
+        <li>
+          <Link to="/4-benefits">{"Unique benefits"}</Link>
         </li>
         <li>
           <Link to="/libraries">{"Open source libraries"}</Link>
