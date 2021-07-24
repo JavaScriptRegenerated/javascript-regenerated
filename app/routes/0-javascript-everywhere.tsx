@@ -1,6 +1,7 @@
 import type { MetaFunction, LinksFunction, LoaderFunction } from "remix";
 import * as React from "react";
 import { useRouteData } from "remix";
+import { loadSimpleIcons, typeLoadedIconComponent } from "../view/icons";
 
 export let meta: MetaFunction = () => {
   return {
@@ -13,16 +14,7 @@ export let links: LinksFunction = () => {
   return [];
 };
 
-function fetchSimpleIcon(name: string) {
-  return fetch(
-    // `https://collected.systems/1/github/simple-icons/simple-icons/5.7.0/icons/${name}`
-    `https://cdn.jsdelivr.net/gh/simple-icons/simple-icons@5.7.0/icons/${name}`,
-    { cache: "force-cache" }
-  ).then((res) => res.text());
-}
-
 const simpleIcons = [
-  "twitter.svg",
   "googlechrome.svg",
   "amazonaws.svg",
   "cloudflare.svg",
@@ -30,28 +22,13 @@ const simpleIcons = [
 
 export let loader: LoaderFunction = async () => {
   return {
-    icons: Object.fromEntries(
-      await Promise.all(
-        function* () {
-          for (const name of simpleIcons) {
-            yield fetchSimpleIcon(name).then((code) => [name, code]);
-          }
-        }.call(null)
-      )
-    ),
+    icons: {
+      ...(await loadSimpleIcons(simpleIcons)),
+    },
   };
 };
 
-function LoadedIcon({
-  name,
-  ...rest
-}: {
-  name: typeof simpleIcons[-1];
-} & Pick<React.SVGProps<SVGElement>, "width" | "height" | "x" | "y">) {
-  const { icons } = useRouteData();
-
-  return <svg {...rest} dangerouslySetInnerHTML={{ __html: icons[name] }} />;
-}
+const LoadedIcon = typeLoadedIconComponent<typeof simpleIcons[-1]>();
 
 function JavaScriptEverywhere(): JSX.Element {
   return (
