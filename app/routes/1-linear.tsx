@@ -69,7 +69,7 @@ function LinearComponentGraphic(): JSX.Element {
 
         {renderDigit("3", 60)}
         <text x="30" y="60">
-          {`return <p>{text}</p>`}
+          {`return <h1>{text}</h1>`}
         </text>
       </g>
     </svg>
@@ -79,6 +79,8 @@ function LinearComponentGraphic(): JSX.Element {
 export default function ScriptsPage() {
   return (
     <main data-measure="center" data-text="center">
+      <h1>Reads and runs from top to bottom</h1>
+
       <h2>Scripts are Linear</h2>
       <LinearScriptGraphic />
       <p>The script is run in order: 1, 2, 3.</p>
@@ -86,6 +88,7 @@ export default function ScriptsPage() {
       <hr data-y="100vh" />
       <h2>Components are Linear</h2>
       <LinearComponentGraphic />
+      <p>The component is run in order: 1, 2, 3.</p>
     </main>
   );
 }

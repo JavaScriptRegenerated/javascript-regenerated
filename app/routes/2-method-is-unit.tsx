@@ -19,8 +19,8 @@ export let links: LinksFunction = () => {
 
 const simpleIcons = [] as const;
 const heroIcons = [
-  "solid/user-group.svg",
-  "solid/cog.svg",
+  "solid/phone-incoming.svg",
+  "solid/phone-outgoing.svg",
   "solid/inbox-in.svg",
   "solid/reply.svg",
   "solid/chat.svg",
@@ -52,8 +52,8 @@ function MessagePrimitivesGraphic(): JSX.Element {
           x={10}
           y={12}
         />
-        <text x="30" y="20">
-          <tspan fontWeight="bold">What: </tspan>
+        <text x="30" y="20" fontFamily="var(--font-mono)">
+          <tspan fontWeight="bold">Send: </tspan>
           <tspan className="token keyword">yield</tspan>
           <tspan> </tspan>
           <tspan className="token string">"some string"</tspan>
@@ -66,8 +66,8 @@ function MessagePrimitivesGraphic(): JSX.Element {
           x={10}
           y={32}
         />
-        <text x="30" y="40">
-          <tspan fontWeight="bold">How: </tspan>
+        <text x="30" y="40" fontFamily="var(--font-mono)">
+          <tspan fontWeight="bold">Receive: </tspan>
           <tspan className="token keyword">const</tspan>
           <tspan> reply </tspan>
           <tspan className="token operator">=</tspan>
@@ -84,8 +84,8 @@ function MessagePrimitivesGraphic(): JSX.Element {
           x={10}
           y={51}
         />
-        <text x="30" y="60">
-          <tspan fontWeight="bold">Why: </tspan>
+        <text x="30" y="60" fontFamily="var(--font-mono)">
+          <tspan fontWeight="bold">Return: </tspan>
           <tspan className="token keyword">return</tspan>
           <tspan> </tspan>
           <tspan className="token string">"final message"</tspan>
@@ -97,41 +97,56 @@ function MessagePrimitivesGraphic(): JSX.Element {
 
 function MessagePrimitivesCode() {
   return (
-    <CodeBlock language="javascript">
-      {`
-function* GenerateSomething() {
-  // Send a message.
-  yield "abc";
-
-  // A message can be a primitive: string, number, regex, symbol.
-  yield "abc";
-  yield 42;
-  yield /[a-z]+/;
-  yield Symbol.for("identifier");
-
-  // A message can be a collection: array, set, map, object.
-  yield ["abc", "def"];
-
-  // A message can be another generator function.
-  yield OtherGenerator;
-
-  // Receive a message reply.
-  const reply = yield "abc";
-
-  // Return a final message.
-  // You can use the result of replies!
-  return { a: "final message", b: result };
+    <>
+      <h2>JavaScript classes allow calling methods</h2>
+      <CodeBlock language="javascript" smaller>
+        {`
+class Counter {
+  incrementBy(amount) {
+    // Code I write
+  }
 }
+
+const counter = new Counter();
+// Call increment method.
+counter.incrementBy(1);
 `.trim()}
-    </CodeBlock>
+      </CodeBlock>
+      <h2>Objective-C classes allow sending messages</h2>
+      <CodeBlock language="objc" smaller>
+        {`
+// Send increment message.
+[counter incrementBy:@1];
+
+// Here is the identifier for this message.
+SEL messageIdentifier = @selector(incrementBy:);
+
+// Send increment message.
+[counter performSelector:@selector(incrementBy:) withObject:@1];
+
+// Create message ready to send.
+// Yes, it is a fair amount of code…
+NSMethodSignature *signature = [Counter
+  instanceMethodSignatureForSelector:@selector(incrementBy:)];
+NSInvocation *sender = [NSInvocation
+  invocationWithMethodSignature:signature];
+NSNumber *amount = @1;
+[sender setArgument:&amount atIndex:2];
+[sender setTarget:counter];
+
+// Now, let’s send the increment message twice.
+[sender invoke];
+[sender invoke];
+`.trim()}
+      </CodeBlock>
+    </>
   );
 }
 
 export default function MessagePrimitivesPage() {
   return (
     <main data-measure="center" data-text="center">
-      <h1>Message Generators</h1>
-      <MessagePrimitivesGraphic />
+      <h1>Methods vs Messages</h1>
       <MessagePrimitivesCode />
 
       {/* <hr data-y="100vh" /> */}

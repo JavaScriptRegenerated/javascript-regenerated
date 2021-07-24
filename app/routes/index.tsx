@@ -4,6 +4,7 @@ import { useRouteData } from "remix";
 import { PrimaryNavigation } from "../navs/primary";
 
 import stylesUrl from "../styles/index.css";
+import { loadHeroIcons, typeLoadedIconComponent } from "../view/icons";
 
 export let meta: MetaFunction = () => {
   return {
@@ -16,14 +17,26 @@ export let links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: stylesUrl }];
 };
 
+const heroIcons = [
+  "solid/chat-alt-2.svg",
+] as const;
+
 export let loader: LoaderFunction = async () => {
-  return {};
+  return {
+    icons: await loadHeroIcons(heroIcons),
+  };
 };
+
+const LoadedIcon = typeLoadedIconComponent<
+  typeof heroIcons[-1]
+>();
 
 export default function Index() {
   return (
     <main data-measure="center" data-text="center">
       <h1>JavaScript Regenerated</h1>
+      <LoadedIcon name="solid/chat-alt-2.svg" width={120} height={120} fill="currentColor" />
+      <h2>Message-oriented generators</h2>
       <PrimaryNavigation />
     </main>
   );

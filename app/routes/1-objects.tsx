@@ -32,7 +32,7 @@ export let loader: LoaderFunction = async () => {
 
 const LoadedIcon = typeLoadedIconComponent<typeof heroIcons[-1]>();
 
-function MessagePrimitivesGraphic(): JSX.Element {
+function ObjectOrientedGraphic(): JSX.Element {
   return (
     <svg viewBox="0 0 180 80">
       <rect width="100%" height="100%" fill="black" />
@@ -75,7 +75,7 @@ function MessagePrimitivesGraphic(): JSX.Element {
   );
 }
 
-function MessagePrimitivesCode() {
+function ObjectOrientedCode() {
   return (
     <CodeBlock language="javascript">
       {`
@@ -150,10 +150,8 @@ export default function MessagePrimitivesPage() {
   return (
     <main data-measure="center" data-text="center">
       <h1>Object-Oriented Modelling</h1>
-      <MessagePrimitivesGraphic />
-      <MessagePrimitivesCode />
-
-      {/* <hr data-y="100vh" /> */}
+      <ObjectOrientedGraphic />
+      <ObjectOrientedCode />
     </main>
   );
 }

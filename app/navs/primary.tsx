@@ -28,6 +28,15 @@ export function PrimaryNavigation() {
           <Link to="/1-linear">{"Linear thinking"}</Link>
         </li>
         <li>
+          <Link to="/1-objects">{"Object-oriented"}</Link>
+        </li>
+        <li>
+          <Link to="/1-what-not-how">{"What, not How"}</Link>
+        </li>
+        <li>
+          <Link to="/1-names">{"Two hardest things"}</Link>
+        </li>
+        <li>
           <Link to="/1-components">{"Component mindset"}</Link>
         </li>
         <li>

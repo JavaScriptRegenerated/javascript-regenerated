@@ -1,8 +1,9 @@
 import { useLayoutEffect, useRef } from "react";
 
 export function CodeBlock(props: {
-  language: "json" | "javascript" | "css" | "html";
+  language: "json" | "javascript" | "css" | "html" | "objc" | "ruby";
   children: string;
+  smaller?: true
 }): JSX.Element {
   const elRef = useRef<HTMLElement>(null);
 
@@ -14,7 +15,7 @@ export function CodeBlock(props: {
   }, [props.children]);
 
   return (
-    <pre>
+    <pre data-text={props.smaller ? "-2" : undefined}>
       <code ref={elRef}>{props.children}</code>
     </pre>
   );

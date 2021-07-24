@@ -1,5 +1,5 @@
 :root {
-  --measure: 44rem;
+  --measure: 34rem;
 
   --text--line-height: 1.25;
 
@@ -227,6 +227,9 @@ hr[data-y="100vh"] {
 }
 [data-text~="-2"] {
   font-size: var(--size--2) !important;
+}
+[data-text~="-3"] {
+  font-size: var(--size--3) !important;
 }
 [data-text~="center"] {
   text-align: center;

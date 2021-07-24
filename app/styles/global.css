@@ -3,13 +3,14 @@
 }
 
 :root {
+  --size--3: 0.666666rem;
   --size--2: 0.75rem;
   --size--1: 0.875rem;
 
   --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
 
-  font-size: 150%;
+  font-size: 200%;
   color: #D9FFFF;
   background-color: #00151C;
 }
