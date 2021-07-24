@@ -72,7 +72,7 @@ function AWSRegionSection(): JSX.Element {
             {`parseString(\n  "${input}",\n  ParseAWSRegion\n)`}
           </CodeBlock>
         </div>
-        <div>
+        <div data-x="grow">
           <CodeBlock language="json">
             {JSON.stringify(parseString(input, ParseAWSRegion), null, 2)}
           </CodeBlock>
@@ -99,9 +99,15 @@ export default function MakeRenderer() {
   return (
     <main data-measure="center">
       <h1>Parser</h1>
-      <CodeBlock language="javascript">{parseString.toString()}</CodeBlock>
 
       <AWSRegionSection />
+
+      <NamedSection
+        id="source-html-producer"
+        heading={<h2>Parser Processor</h2>}
+      >
+        <CodeBlock language="javascript">{parseString.toString()}</CodeBlock>
+      </NamedSection>
     </main>
   );
 }

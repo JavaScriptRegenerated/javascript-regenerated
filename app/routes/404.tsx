@@ -1,4 +1,5 @@
 import type { MetaFunction } from "remix";
+import { PrimaryNavigation } from "../navs/primary";
 
 export let meta: MetaFunction = () => {
   return { title: "Ain't nothing here" };
@@ -6,8 +7,11 @@ export let meta: MetaFunction = () => {
 
 export default function FourOhFour() {
   return (
-    <div>
-      <h1>404</h1>
-    </div>
+    <main data-measure="center">
+      <h1>404 Page not found</h1>
+    
+      <h2>Main menu</h2>
+      <PrimaryNavigation />
+    </main>
   );
 }

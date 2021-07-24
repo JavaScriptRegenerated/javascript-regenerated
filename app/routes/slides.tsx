@@ -34,7 +34,8 @@ export default function Index() {
       >
         <Outlet />
       </main>
-      <nav data-measure="center" style={{ marginTop: "100vh" }}>
+      <hr data-y="100vh" />
+      <nav data-measure="center">
         <ol>
           <li>
             <a href="/slides/1-intro">Intro</a>

@@ -1,19 +1,17 @@
 import type { MetaFunction, LinksFunction, LoaderFunction } from "remix";
-import { Link } from "remix";
+import { Link, Outlet } from "react-router-dom";
 import { useRouteData } from "remix";
-import { PrimaryNavigation } from "../navs/primary";
-
-import stylesUrl from "../styles/index.css";
+import { makeNavItems } from "../navs/primary";
 
 export let meta: MetaFunction = () => {
   return {
     title: "Remix Starter",
-    description: "Welcome to remix!"
+    description: "Welcome to remix!",
   };
 };
 
 export let links: LinksFunction = () => {
-  return [{ rel: "stylesheet", href: stylesUrl }];
+  return [];
 };
 
 export let loader: LoaderFunction = async () => {
@@ -21,10 +19,15 @@ export let loader: LoaderFunction = async () => {
 };
 
 export default function Index() {
+  let data = useRouteData();
+
   return (
-    <main data-measure="center" data-text="center">
-      <h1>JavaScript Regenerated</h1>
-      <PrimaryNavigation />
-    </main>
+    <>
+      <Outlet />
+      <hr data-y="100vh" />
+      <nav data-measure="center">
+        <ul>{makeNavItems}</ul>
+      </nav>
+    </>
   );
 }

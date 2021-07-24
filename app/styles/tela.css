@@ -196,6 +196,10 @@ nav {
   margin-left: auto;
 }
 
+[data-x~="grow"] {
+  flex-grow: 1;
+}
+
 hr[data-x="1"] {
   margin-left: 1rem;
 }
@@ -207,6 +211,9 @@ hr[data-y="1"] {
 }
 hr[data-y="1/2"] {
   margin-top: 0.5rem;
+}
+hr[data-y="100vh"] {
+  margin-top: 100vh;
 }
 
 [data-text] {
@@ -229,4 +236,7 @@ hr[data-y="1/2"] {
 }
 [data-text~="italic"] {
   font-style: italic;
+}
+[data-text~="uppercase"] {
+  text-transform: uppercase;
 }

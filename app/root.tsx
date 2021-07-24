@@ -55,12 +55,12 @@ export default function App() {
     <Document>
       <Outlet />
       <footer role="contentinfo">
-        <nav>
+        <nav data-p="1" data-text="uppercase">
           <ul>
             <li><a href="/">Home</a></li>
           </ul>
         </nav>
-        <p>This page was rendered at {data.date.toLocaleString()}</p>
+        <p style={{ fontSize: "25%", opacity: 0.25 }}>This page was rendered at {data.date.toLocaleString()}</p>
       </footer>
     </Document>
   );

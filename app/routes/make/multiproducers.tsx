@@ -1,7 +1,7 @@
 import type { MetaFunction, LinksFunction, LoaderFunction } from "remix";
 import { useRouteData } from "remix";
 import { countByteSize } from "../../model/bytes";
-import { html, css, processHTML, processCSS } from "../../model/rendering";
+import { HTML, CSS, processHTML, processCSS } from "../../model/rendering";
 import { Await } from "../../types/helpers";
 import { CodeBlock } from "../../view/code";
 import { NamedSection } from "../../view/semantics";
@@ -18,10 +18,10 @@ export let links: LinksFunction = () => {
 };
 
 function* Example() {
-  yield html`<h1>Hello!</h1>`;
-  yield html`<p>This is HTML</p>`;
-  yield css("p", "color: red;");
-  yield css("p:after", "color: blue; content: ' and this is CSS';");
+  yield HTML`<h1>Hello!</h1>`;
+  yield HTML`<p>This is HTML</p>`;
+  yield CSS("p", "color: red;");
+  yield CSS("p:after", "color: blue; content: ' and this is CSS';");
 }
 
 export async function loader(args: Parameters<LoaderFunction>[0]) {
@@ -73,13 +73,10 @@ export default function MultiProducers() {
           className="X"
           style={{ border: "1px solid black", padding: "1rem" }}
         >
-          <blockquote>
-            <style dangerouslySetInnerHTML={{ __html: cssOutput }}></style>
-            <div dangerouslySetInnerHTML={{ __html: htmlOutput }}></div>
-          </blockquote>
+          <style dangerouslySetInnerHTML={{ __html: cssOutput }}></style>
+          <div dangerouslySetInnerHTML={{ __html: htmlOutput }}></div>
         </output>
       </NamedSection>
-      <p>Message from the loader: {data.message}</p>
     </main>
   );
 }

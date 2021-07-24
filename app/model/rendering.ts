@@ -17,7 +17,7 @@ const out = {
   }),
 };
 
-export const { html, css } = out;
+export const { html: HTML, css: CSS } = out;
 
 export type RenderingMessage = ReturnType<typeof out.html | typeof out.css>;
 
