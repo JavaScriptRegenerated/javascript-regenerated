@@ -50,7 +50,7 @@ export async function loadHeroIcons(
 }
 
 interface LoadedIconProps<Name extends string>
-  extends Pick<React.SVGProps<SVGElement>, "width" | "height" | "x" | "y" | "fill"> {
+  extends Pick<React.SVGProps<SVGElement>, "width" | "height" | "x" | "y" | "fill" | "stroke"> {
   name: Name;
 }
 export function LoadedIcon<Name extends string>({

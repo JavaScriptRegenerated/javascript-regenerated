@@ -26,9 +26,7 @@ const simpleIcons = [
 
 export let loader: LoaderFunction = async () => {
   return {
-    icons: {
-      ...(await loadSimpleIcons(simpleIcons)),
-    },
+    icons: await loadSimpleIcons(simpleIcons),
   };
 };
 
