@@ -3,13 +3,13 @@ import { Link } from "remix";
 export const makeNavItems = (
   <>
     <li>
-      <Link to="/make/parser">{"Parser"}</Link>
-    </li>
-    <li>
       <Link to="/make/html-renderer">{"HTML renderer"}</Link>
     </li>
     <li>
       <Link to="/make/schema">{"Schema validator"}</Link>
+    </li>
+    <li>
+      <Link to="/make/parser">{"Parser"}</Link>
     </li>
     <li>
       <Link to="/make/multiproducers">{"Multicolored components"}</Link>
@@ -43,7 +43,7 @@ export function PrimaryNavigation() {
           <Link to="/2-method-is-unit">{"Methods vs messages"}</Link>
         </li>
         <li>
-          <Link to="/2-message-primitives">{"Sending primitives"}</Link>
+          <Link to="/2-message-primitives">{"Message generators"}</Link>
         </li>
         <li>
           <Link to="/3-message-processors">{"Message processors"}</Link>

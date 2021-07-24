@@ -41,21 +41,10 @@ export default function MultiProducers() {
   return (
     <main data-measure="center">
       <h1>Multi Producers</h1>
-      <h2>Input</h2>
-      <pre>
-        <code
-          className="lang-javascript"
-          contentEditable
-          style={{ display: "block" }}
-          onInput={({ target }) => {
-            if (target instanceof HTMLElement) {
-              (window as any).Prism.highlightElement(target);
-            }
-          }}
-        >
-          {data.functionsSource.Example}
-        </code>
-      </pre>
+      <h2>Component</h2>
+      <CodeBlock language="javascript" smaller>
+        {data.functionsSource.Example}
+      </CodeBlock>
       <h2>Generated code</h2>
       <NamedSection
         id="generated-html-heading"

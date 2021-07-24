@@ -30,6 +30,11 @@ pre[class*=language-] {
   line-height: 1.45 !important;
 }
 
+textarea, input[type=text], input[type=number] {
+  font-size: 1rem;
+  font-family: inherit;
+}
+
 /* Allow syntax highlighting to apply to SVG elements */
 svg tspan.token {
   fill: currentColor;

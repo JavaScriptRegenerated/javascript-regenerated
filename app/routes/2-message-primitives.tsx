@@ -85,7 +85,7 @@ function MessagePrimitivesGraphic(): JSX.Element {
           y={51}
         />
         <text x="30" y="60" fontFamily="var(--font-mono)">
-          <tspan fontWeight="bold">Return: </tspan>
+          <tspan fontWeight="bold">Result: </tspan>
           <tspan className="token keyword">return</tspan>
           <tspan> </tspan>
           <tspan className="token string">"final message"</tspan>
@@ -120,7 +120,7 @@ function* GenerateSomething() {
 
   // Return a final message.
   // You can use the result of replies!
-  return { a: "final message", b: result };
+  return { a: "final result", b: reply };
 }
 `.trim()}
     </CodeBlock>
