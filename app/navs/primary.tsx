@@ -12,7 +12,7 @@ export const makeNavItems = (
       <Link to="/make/schema">{"Schema validator"}</Link>
     </li>
     <li>
-      <Link to="/make/multiproducers">{"Multi-producer components"}</Link>
+      <Link to="/make/multiproducers">{"Multicolored components"}</Link>
     </li>
   </>
 );
