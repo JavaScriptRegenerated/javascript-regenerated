@@ -61,9 +61,6 @@ export function PrimaryNavigation() {
           <Link to="/5-function-of">{"Function of X"}</Link>
         </li>
         <li>
-          <Link to="/glossary">{"Glossary"}</Link>
-        </li>
-        <li>
           <Link to="/libraries">{"Open source libraries"}</Link>
         </li>
         <li>
