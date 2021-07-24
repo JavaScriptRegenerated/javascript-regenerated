@@ -56,13 +56,16 @@ export function PrimaryNavigation() {
             {"Generator functions vs classes"}
           </Link>
         </li>
+        <li role="separator" data-y="1" />
         {makeNavItems}
+        <li role="separator" data-y="1" />
         <li>
-          <Link to="/5-function-of">{"Function of X"}</Link>
+          <Link to="/5-function-of">{"More than the view"}</Link>
         </li>
         <li>
           <Link to="/libraries">{"Open source libraries"}</Link>
         </li>
+        <li role="separator" data-y="1" />
         <li>
           <Link to="/thanks">{"Thanks"}</Link>
         </li>
