@@ -34,13 +34,13 @@ export function PrimaryNavigation() {
           <Link to="/2-message-generators">{"Message generators"}</Link>
         </li>
         <li>
-          <Link to="/2-message-processors">{"Message processors"}</Link>
-        </li>
-        <li>
           <Link to="/2-primitives">{"Sending primitives"}</Link>
         </li>
         <li>
-          <Link to="/2-primitives">{"Sending functions"}</Link>
+          <Link to="/2-message-processors">{"Message processors"}</Link>
+        </li>
+        <li>
+          <Link to="/2-functions">{"Sending functions"}</Link>
         </li>
         <li>
           <Link to="/generator-functions-vs-classes">

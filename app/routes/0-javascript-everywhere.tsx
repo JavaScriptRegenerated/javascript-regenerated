@@ -1,7 +1,11 @@
 import type { MetaFunction, LinksFunction, LoaderFunction } from "remix";
 import * as React from "react";
 import { useRouteData } from "remix";
-import { loadSimpleIcons, typeLoadedIconComponent } from "../view/icons";
+import {
+  loadHeroIcons,
+  loadSimpleIcons,
+  typeLoadedIconComponent,
+} from "../view/icons";
 
 export let meta: MetaFunction = () => {
   return {
@@ -41,13 +45,21 @@ function JavaScriptEverywhere(): JSX.Element {
           height={12}
           x={10}
           y={12}
+          fill="currentColor"
         />
         <text x="30" y="20">
           <tspan fontWeight="bold">Browsers: </tspan>
           {`Firefox, Edge, Safari, Chrome`}
         </text>
 
-        <LoadedIcon name="amazonaws.svg" width={12} height={12} x={10} y={32} />
+        <LoadedIcon
+          name="amazonaws.svg"
+          width={12}
+          height={12}
+          x={10}
+          y={32}
+          fill="currentColor"
+        />
         <text x="30" y="40">
           <tspan fontWeight="bold">Cloud: </tspan>
           {`Node.js, Lambda, Containers`}
@@ -59,6 +71,7 @@ function JavaScriptEverywhere(): JSX.Element {
           height={12}
           x={10}
           y={51}
+          fill="currentColor"
         />
         <text x="30" y="60">
           <tspan fontWeight="bold">Edge: </tspan>
@@ -72,10 +85,8 @@ function JavaScriptEverywhere(): JSX.Element {
 export default function ScriptsPage() {
   return (
     <main data-measure="center" data-text="center">
-      <h2>JavaScript is Everywhere</h2>
+      <h1>JavaScript is Everywhere</h1>
       <JavaScriptEverywhere />
-
-      <hr data-y="100vh" />
     </main>
   );
 }
