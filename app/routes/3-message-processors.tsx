@@ -46,17 +46,6 @@ const LoadedIcon = typeLoadedIconComponent<
   typeof simpleIcons[-1] | typeof heroIcons[-1]
 >();
 
-function renderDigit(text: string, offsetY: number) {
-  return (
-    <>
-      <text x={15} y={offsetY} textAnchor="middle">
-        {text}
-      </text>
-      <circle cx={15} cy={offsetY - 3.5} r={8} fill="white" fillOpacity={0.25} />
-    </>
-  );
-}
-
 const textIndent = 30;
 const textY = (index: number) => index * 20 + 20;
 const iconY = (index: number) => index * 20 + 12;

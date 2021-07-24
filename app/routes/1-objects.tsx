@@ -111,7 +111,7 @@ class Chef {
 }
 
 
-// Does the recipe turn on the oven only if needs?
+// Does the recipe turn on the oven only when needed?
 class Chef {
   makeRecipe(recipe) {
     recipe.make(this.oven);
@@ -140,6 +140,9 @@ class Manager {
 }
 class Ingredients {
   purchase() { … }
+}
+class Shop {
+  purchase(items) { … }
 }
 `.trim()}
     </CodeBlock>

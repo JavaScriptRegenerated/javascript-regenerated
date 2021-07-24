@@ -31,7 +31,7 @@ export function PrimaryNavigation() {
           <Link to="/1-objects">{"Object-oriented"}</Link>
         </li>
         <li>
-          <Link to="/1-what-not-how">{"What, not How"}</Link>
+          <Link to="/1-what-not-how">{"What, not how"}</Link>
         </li>
         <li>
           <Link to="/1-names">{"Two hardest things"}</Link>
@@ -40,16 +40,16 @@ export function PrimaryNavigation() {
           <Link to="/1-components">{"Component mindset"}</Link>
         </li>
         <li>
-          <Link to="/2-message-generators">{"Message generators"}</Link>
+          <Link to="/2-method-is-unit">{"Methods vs messages"}</Link>
         </li>
         <li>
-          <Link to="/2-primitives">{"Sending primitives"}</Link>
+          <Link to="/2-message-primitives">{"Sending primitives"}</Link>
         </li>
         <li>
-          <Link to="/2-message-processors">{"Message processors"}</Link>
+          <Link to="/3-message-processors">{"Message processors"}</Link>
         </li>
         <li>
-          <Link to="/2-functions">{"Sending functions"}</Link>
+          <Link to="/3-functions">{"Sending functions"}</Link>
         </li>
         <li>
           <Link to="/generator-functions-vs-classes">
