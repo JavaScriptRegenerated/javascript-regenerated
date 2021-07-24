@@ -1,6 +1,7 @@
 import type { MetaFunction, LinksFunction, LoaderFunction } from "remix";
 import { useRouteData } from "remix";
-import { processHTML, processCSS } from "../../model/rendering";
+import { html, processHTML } from "../../model/rendering";
+import { Await } from "../../types/helpers";
 import { CodeBlock } from "../../view/code";
 
 export let meta: MetaFunction = () => {
@@ -14,22 +15,34 @@ export let links: LinksFunction = () => {
   return [];
 };
 
-export let loader: LoaderFunction = async () => {
-  return { message: "this is awesome 😎" };
-};
+function* HTMLComponent() {
+  yield html`<h1>Hello!</h1>`;
+  yield html`<ul>`;
+  yield html`<li>Some`;
+  yield html`<li>list`;
+  yield html`<li>items`;
+  yield html`</ul>`;
+}
+
+export async function loader(args: Parameters<LoaderFunction>[0]) {
+  return {
+    functionsSource: {
+      HTMLComponent: HTMLComponent.toString(),
+    },
+  };
+}
 
 export default function MakeRenderer() {
-  let data = useRouteData();
+  let data: Await<ReturnType<typeof loader>> = useRouteData();
 
   return (
     <main data-measure="center">
       <h1>Renderers</h1>
-      <h2>HTML</h2>
       <CodeBlock language="javascript">{processHTML.toString()}</CodeBlock>
 
-      <h2>CSS</h2>
-      <CodeBlock language="javascript">{processCSS.toString()}</CodeBlock>
-      <p>Message from the loader: {data.message}</p>
+      <h2>HTML Component</h2>
+      <CodeBlock language="javascript">{data.functionsSource.HTMLComponent}</CodeBlock>
+
     </main>
   );
 }

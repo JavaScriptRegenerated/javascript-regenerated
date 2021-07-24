@@ -29,16 +29,16 @@ export default function Index() {
             <Link to="/generator-functions-vs-classes">{'Generator Functions vs Classes'}</Link>
           </li>
           <li>
-            <Link to="/make/parser">{'Make a Parser'}</Link>
+            <Link to="/make/parser">{'Parser'}</Link>
           </li>
           <li>
-            <Link to="/make/renderer">{'Make an HTML & CSS Renderer'}</Link>
+            <Link to="/make/renderer">{'HTML & CSS Renderer'}</Link>
           </li>
           <li>
-            <Link to="/make/schema">{'Make a Schema validator'}</Link>
+            <Link to="/make/schema">{'Schema validator'}</Link>
           </li>
           <li>
-            <Link to="/multiproducers">{'Multi-Producer Components'}</Link>
+            <Link to="/make/multiproducers">{'Multi-Producer Components'}</Link>
           </li>
           <li>
             <Link to="/glossary">{'Glossary'}</Link>

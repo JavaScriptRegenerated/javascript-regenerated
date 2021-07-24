@@ -5,7 +5,7 @@ export const identifiers = {
   image: "image",
 } as const;
 
-export const out = {
+const out = {
   html: (raw: TemplateStringsArray) => ({
     type: identifiers.html,
     raw: raw.raw.join(""),
@@ -16,6 +16,8 @@ export const out = {
     rules,
   }),
 };
+
+export const { html, css } = out;
 
 export type RenderingMessage = ReturnType<typeof out.html | typeof out.css>;
 

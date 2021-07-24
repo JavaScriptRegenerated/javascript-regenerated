@@ -1,9 +1,10 @@
 import type { MetaFunction, LinksFunction, LoaderFunction } from "remix";
 import { useRouteData } from "remix";
-import { out, processHTML, processCSS } from "../model/rendering";
-import { Await } from "../types/helpers";
-import { CodeBlock } from "../view/code";
-import { NamedSection } from "../view/semantics";
+import { countByteSize } from "../../model/bytes";
+import { html, css, processHTML, processCSS } from "../../model/rendering";
+import { Await } from "../../types/helpers";
+import { CodeBlock } from "../../view/code";
+import { NamedSection } from "../../view/semantics";
 
 export let meta: MetaFunction = () => {
   return {
@@ -17,16 +18,10 @@ export let links: LinksFunction = () => {
 };
 
 function* Example() {
-  yield out.html`<h1>Hello!</h1>`;
-  yield out.html`<p>This is HTML</p>`;
-  yield out.css("p", "color: red;");
-  yield out.css("p:after", "color: blue; content: ' and this is CSS';");
-}
-
-function countByteSize(input: string): number {
-  const encoder = new TextEncoder();
-  const view = encoder.encode(input);
-  return view.length;
+  yield html`<h1>Hello!</h1>`;
+  yield html`<p>This is HTML</p>`;
+  yield css("p", "color: red;");
+  yield css("p:after", "color: blue; content: ' and this is CSS';");
 }
 
 export async function loader(args: Parameters<LoaderFunction>[0]) {
@@ -40,8 +35,8 @@ export async function loader(args: Parameters<LoaderFunction>[0]) {
 export default function MultiProducers() {
   let data: Await<ReturnType<typeof loader>> = useRouteData();
 
-  const html = Array.from(processHTML(Example)).join("");
-  const css = Array.from(processCSS(Example)).join("");
+  const htmlOutput = Array.from(processHTML(Example)).join("");
+  const cssOutput = Array.from(processCSS(Example)).join("");
 
   return (
     <main data-measure="center">
@@ -66,12 +61,12 @@ export default function MultiProducers() {
         id="generated-html-heading"
         heading={<h3>Generated HTML</h3>}
       >
-        <CodeBlock language="html">{html}</CodeBlock>
-        <p>HTML: {countByteSize(html)} bytes</p>
+        <CodeBlock language="html">{htmlOutput}</CodeBlock>
+        <p>HTML: {countByteSize(htmlOutput)} bytes</p>
       </NamedSection>
       <NamedSection id="generated-css-heading" heading={<h3>Generated CSS</h3>}>
-        <CodeBlock language="css">{css}</CodeBlock>
-        <p>CSS: {countByteSize(css)} bytes</p>
+        <CodeBlock language="css">{cssOutput}</CodeBlock>
+        <p>CSS: {countByteSize(cssOutput)} bytes</p>
       </NamedSection>
       <NamedSection id="preview-heading" heading={<h2>Output Preview</h2>}>
         <output
@@ -79,8 +74,8 @@ export default function MultiProducers() {
           style={{ border: "1px solid black", padding: "1rem" }}
         >
           <blockquote>
-            <style dangerouslySetInnerHTML={{ __html: css }}></style>
-            <div dangerouslySetInnerHTML={{ __html: html }}></div>
+            <style dangerouslySetInnerHTML={{ __html: cssOutput }}></style>
+            <div dangerouslySetInnerHTML={{ __html: htmlOutput }}></div>
           </blockquote>
         </output>
       </NamedSection>
