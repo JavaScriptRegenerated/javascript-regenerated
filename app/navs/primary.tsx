@@ -75,19 +75,19 @@ export function PrimaryNavigation({
         {makeNavItems}
         <li role="separator" data-y="1" />
         <li>
-          <NavLink href="/4-function-of">{"More than the view"}</NavLink>
+          <NavLink href="/4-why-not">{"More than the view"}</NavLink>
         </li>
         <li>
-          <NavLink href="/4-javascript-everywhere">
+          <NavLink href="/4-benefits">
             {"JavaScript’s benefits"}
           </NavLink>
         </li>
         <li>
-          <NavLink href="/5-libraries">{"Open source libraries"}</NavLink>
+          <NavLink href="/4-libraries">{"Open source libraries"}</NavLink>
         </li>
         <li role="separator" data-y="1" />
         <li>
-          <NavLink href="/5-thanks">{"Thanks"}</NavLink>
+          <NavLink href="/4-thanks">{"Thanks"}</NavLink>
         </li>
       </ul>
     </nav>

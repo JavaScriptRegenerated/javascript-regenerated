@@ -22,10 +22,10 @@ export default function LibrariesPage() {
       <h2>Open Source Libraries</h2>
       <nav data-text="1">
         <ul {...Y(1)}>
-          <li><a href="https://github.com/RoyalIcing/yieldparser">yieldparser:</a> Parser components</li>
-          <li><a href="https://github.com/RoyalIcing/yieldmarkup">yieldmarkup:</a> Async HTML components</li>
-          <li><a href="https://github.com/RoyalIcing/yieldmachine">yieldmachine:</a> Define state machines with generator functions</li>
-          <li><a href="https://github.com/RoyalIcing/yieldpattern">yieldpattern:</a> Pattern matching in vanilla JavaScript with generator functions</li>
+          <li><a href="https://github.com/RoyalIcing/yieldparser" style={{ color: "#F59E0B" }}>RoyalIcing/yieldparser:</a> Parse strings using composable components.</li>
+          <li><a href="https://github.com/RoyalIcing/yieldmarkup" style={{ color: "#A78BFA" }}>RoyalIcing/yieldmarkup:</a> Async HTML components.</li>
+          <li><a href="https://github.com/RoyalIcing/yieldmachine" style={{ color: "#10B981" }}>RoyalIcing/yieldmachine:</a> Define state machines with generator functions.</li>
+          <li><a href="https://github.com/RoyalIcing/yieldpattern" style={{ color: "#EC4899" }}>RoyalIcing/yieldpattern:</a> Pattern matching in vanilla JavaScript with generator functions.</li>
         </ul>
       </nav>
 
