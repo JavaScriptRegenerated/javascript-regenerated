@@ -46,7 +46,7 @@ function* Example() {
   );
 
   yield CSS("p", "color: red;");
-  yield CSS("p:after", "color: blue; content: ' and this is CSS';");
+  yield CSS("p:after", "color: deepskyblue; content: ' and this is CSS';");
 }
 
 export async function loader(args: Parameters<LoaderFunction>[0]) {
@@ -64,10 +64,17 @@ export async function loader(args: Parameters<LoaderFunction>[0]) {
 }
 
 function validateLinks(links: Iterable<string>): Set<string> {
-  const validLinks = new Set(["/", "/about", "/hiring", "/privacy"]);
+  const knowLinks = new Set([
+    "/",
+    "/about",
+    "/hiring",
+    "/privacy",
+    "/blog",
+    "/features",
+  ]);
   const invalidLinks = new Set<string>();
   for (const link of links) {
-    if (validLinks.has(link)) continue;
+    if (knowLinks.has(link)) continue;
     invalidLinks.add(link);
   }
   return invalidLinks;
@@ -83,7 +90,9 @@ export default function MulticoloredComponentsPage() {
   const links = Array.from(allLinks(Example));
   const invalidLinks = Array.from(validateLinks(links));
   const origins = Array.from(allLoadedOrigins(Example));
-  const metaLinkHTML = toString(processHTML(() => processMetaLinkHTML(Example)));
+  const metaLinkHTML = toString(
+    processHTML(() => processMetaLinkHTML(Example))
+  );
 
   return (
     <main data-measure="center">
@@ -110,15 +119,19 @@ const links = Array.from(allLinks(Example));
 const invalidLinks = Array.from(validateLinks(links));
 `.trim()}
       </CodeBlock>
-      <NamedSection id="generated-html" heading={<h3>Generated HTML</h3>}>
-        <CodeBlock language="html">{htmlOutput}</CodeBlock>
+      <NamedSection id="generated-html" heading={<h3>HTML Output</h3>}>
+        <CodeBlock language="html" smaller>
+          {htmlOutput}
+        </CodeBlock>
         <p>HTML: {countByteSize(htmlOutput)} bytes</p>
       </NamedSection>
-      <NamedSection id="generated-css" heading={<h3>Generated CSS</h3>}>
-        <CodeBlock language="css">{cssOutput}</CodeBlock>
+      <NamedSection id="generated-css" heading={<h3>CSS Output</h3>}>
+        <CodeBlock language="css" smaller>
+          {cssOutput}
+        </CodeBlock>
         <p>CSS: {countByteSize(cssOutput)} bytes</p>
       </NamedSection>
-      <NamedSection id="generated-links" heading={<h3>Generated Links</h3>}>
+      <NamedSection id="generated-links" heading={<h3>All Links</h3>}>
         <CodeBlock language="json">{JSON.stringify(links, null, 2)}</CodeBlock>
       </NamedSection>
       <NamedSection id="invalid-links" heading={<h3>Invalid Links</h3>}>
