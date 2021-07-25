@@ -1,5 +1,3 @@
-import { Link } from "remix";
-
 export const makeNavItems = (
   <>
     <li>
@@ -15,7 +13,7 @@ export const makeNavItems = (
       <a href="/make/state-machine">{"State machine"}</a>
     </li>
     <li>
-      <a href="/make/multiproducers">{"Multicolored components"}</a>
+      <a href="/make/multicolored">{"Multicolored components"}</a>
     </li>
   </>
 );
