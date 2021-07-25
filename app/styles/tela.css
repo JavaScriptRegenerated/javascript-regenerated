@@ -222,6 +222,15 @@ hr[data-y="100vh"] {
 [data-text~="0"] {
   font-size: var(--size-0) !important;
 }
+[data-text~="1"] {
+  font-size: var(--size-1) !important;
+}
+[data-text~="2"] {
+  font-size: var(--size-2) !important;
+}
+[data-text~="3"] {
+  font-size: var(--size-3) !important;
+}
 [data-text~="-1"] {
   font-size: var(--size--1) !important;
 }

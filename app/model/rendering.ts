@@ -62,6 +62,17 @@ export function* processHTML(
     if (message.type === identifiers.html) {
       yield message.raw;
       yield "\n";
+    }
+  }
+}
+
+export function* processRichHTML(
+  generator: () => Generator<RenderingMessage, void, void>
+) {
+  for (const message of generator()) {
+    if (message.type === identifiers.html) {
+      yield message.raw;
+      yield "\n";
     } else if (message.type === identifiers.link) {
       yield `<a href="${message.to}">${message.text}</a>`;
       yield "\n";

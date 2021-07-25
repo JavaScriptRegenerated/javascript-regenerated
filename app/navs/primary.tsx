@@ -32,10 +32,7 @@ export function PrimaryNavigation() {
           <a href="/1-what-not-how">{"What, not how"}</a>
         </li>
         <li>
-          <a href="/1-names">{"Two hardest things"}</a>
-        </li>
-        <li>
-          <a href="/1-components">{"Component mindset"}</a>
+          <a href="/1-hard-things">{"Two hardest things"}</a>
         </li>
         <li role="separator" data-y="1" />
         <li>
@@ -57,17 +54,14 @@ export function PrimaryNavigation() {
           <a href="/4-function-of">{"More than the view"}</a>
         </li>
         <li>
-          <a href="/4-javascript-everywhere">{"JavaScript is everywhere"}</a>
+          <a href="/4-javascript-everywhere">{"JavaScript’s benefits"}</a>
         </li>
         <li>
-          <a href="/4-benefits">{"Unique benefits"}</a>
-        </li>
-        <li>
-          <a href="/libraries">{"Open source libraries"}</a>
+          <a href="/5-libraries">{"Open source libraries"}</a>
         </li>
         <li role="separator" data-y="1" />
         <li>
-          <a href="/thanks">{"Thanks"}</a>
+          <a href="/5-thanks">{"Thanks"}</a>
         </li>
       </ul>
     </nav>

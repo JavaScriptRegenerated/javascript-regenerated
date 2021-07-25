@@ -4,6 +4,7 @@ import { countByteSize } from "../../model/bytes";
 import { HTML, processHTML } from "../../model/rendering";
 import { Await } from "../../types/helpers";
 import { CodeBlock } from "../../view/code";
+import { formatJavaScript } from "../../view/codeFormatting";
 import { NamedSection } from "../../view/semantics";
 import { X } from "../../view/structure";
 
@@ -30,7 +31,7 @@ function* HTMLComponent() {
 export async function loader(args: Parameters<LoaderFunction>[0]) {
   return {
     functionsSource: {
-      HTMLComponent: HTMLComponent.toString(),
+      HTMLComponent: formatJavaScript(HTMLComponent.toString()),
     },
   };
 }
@@ -64,6 +65,35 @@ export default function MakeRenderer() {
 
       <NamedSection id="source-html-producer" heading={<h2>HTML Processor</h2>}>
         <CodeBlock language="javascript">{processHTML.toString()}</CodeBlock>
+
+        <h3>Convert to a single string</h3>
+        <CodeBlock language="javascript" smaller>
+          {`
+const generator = processHTML(Example);
+const htmlString = Array.from(generator).join("");
+`.trim()}
+        </CodeBlock>
+
+        <h3>Convert to <a href="https://developer.mozilla.org/en-US/docs/Web/API/ReadableStream">readable stream</a></h3>
+        <CodeBlock language="javascript" smaller>
+          {`
+const generator = processHTML(Example);
+const sream = new ReadableStream({
+  pull(controller) {
+    const { value, done } = generator.next();
+
+    if (done) {
+      controller.close();
+    } else {
+      controller.enqueue(value);
+    }
+  }
+});
+const response = new Response(stream, {
+  headers: { "Content-Type": "text/html" }
+});
+`.trim()}
+        </CodeBlock>
       </NamedSection>
     </main>
   );

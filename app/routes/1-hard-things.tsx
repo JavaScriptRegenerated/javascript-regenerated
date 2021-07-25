@@ -50,6 +50,41 @@ const textIndent = 30;
 const textY = (index: number) => index * 20 + 20;
 const iconY = (index: number) => index * 20 + 12;
 
+function HardestThingsGraphic(): JSX.Element {
+  return (
+    <svg viewBox="0 0 180 80">
+      <rect width="100%" height="100%" fill="black" />
+      <g x="20" fontSize="8" fill="white">
+        <LoadedIcon
+          name="solid/tag.svg"
+          width={12}
+          height={12}
+          x={10}
+          y={iconY(0)}
+        />
+        <text x={textIndent} y={textY(0)}>
+          <tspan fontWeight="bold">Naming</tspan>
+        </text>
+
+        <LoadedIcon
+          name="solid/refresh.svg"
+          width={12}
+          height={12}
+          x={10}
+          y={iconY(1)}
+        />
+        <text x={textIndent} y={textY(1)}>
+          <tspan fontWeight="bold">Cache invalidation</tspan>
+        </text>
+
+        <text x="8" y={textY(2)}>
+          {`Components force teams to tackle both!`}
+        </text>
+      </g>
+    </svg>
+  );
+}
+
 function SemanticLayerGraphic(): JSX.Element {
   function renderText(index: number, text: string) {
     return (
@@ -195,14 +230,20 @@ function ComponentModelGraphic(): JSX.Element {
   );
 }
 
-export default function ScriptsPage() {
+export default function HardThingsPage() {
   return (
     <main data-measure="center" data-text="center">
-      <h1>Why Components?</h1>
+      <h1>Two hardest things</h1>
+      <HardestThingsGraphic />
+
+      <hr data-y="100vh" />
+
+      <h2>Components add meaning, remove fluff</h2>
       <SemanticLayerGraphic />
 
       <hr data-y="100vh" />
 
+      <h2>The Component Model</h2>
       <ComponentModelGraphic />
     </main>
   );

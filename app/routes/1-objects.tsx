@@ -48,14 +48,30 @@ function ObjectOrientedGraphic(): JSX.Element {
           <tspan fontWeight="bold">A richer model</tspan>
         </text>
 
-        <LoadedIcon
+        {/* <LoadedIcon
           name="solid/arrows-expand.svg"
           width={12}
           height={12}
           x={10}
           y={32}
+          color="inherit"
           stroke="currentColor"
-        />
+        /> */}
+        <svg width={12} height={12} x={10} y={31}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 19 20"
+            fill="currentColor"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M3 8V4m0 0h4M3 4l4 4m8 0V4m0 0h-4m4 0l-4 4m-8 4v4m0 0h4m-4 0l4-4m8 4l-4-4m4 4v-4m0 4h-4"
+            ></path>
+          </svg>
+        </svg>
         <text x="30" y="40">
           <tspan fontWeight="bold">Decision explosion</tspan>
         </text>
@@ -79,6 +95,11 @@ function ObjectOrientedCode() {
   return (
     <CodeBlock language="javascript">
       {`
+class Recipe {
+  // Has ingredients & steps
+}
+
+
 // Do we set properties when initializing?
 class Recipe {
   constructor(ingredients, steps) {
@@ -99,6 +120,14 @@ class Recipe {
   constructor(ingredients, steps) { … }
   setIngredients(ingredients) { … }
   setSteps(steps) { … }
+}
+
+
+// Recipes are made by chefs
+class Chef {
+  makeRecipe(recipe) {
+    …
+  }
 }
 
 

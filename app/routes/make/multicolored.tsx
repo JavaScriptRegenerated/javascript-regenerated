@@ -5,7 +5,7 @@ import {
   HTML,
   CSS,
   Link,
-  processHTML,
+  processRichHTML,
   processCSS,
   allLinks,
   RemoteImage,
@@ -85,13 +85,13 @@ export default function MulticoloredComponentsPage() {
 
   const toString = (iteratable: Iterable<string>) =>
     Array.from(iteratable).join("");
-  const htmlOutput = toString(processHTML(Example));
+  const htmlOutput = toString(processRichHTML(Example));
   const cssOutput = toString(processCSS(Example));
   const links = Array.from(allLinks(Example));
   const invalidLinks = Array.from(validateLinks(links));
   const origins = Array.from(allLoadedOrigins(Example));
   const metaLinkHTML = toString(
-    processHTML(() => processMetaLinkHTML(Example))
+    processRichHTML(() => processMetaLinkHTML(Example))
   );
 
   return (
@@ -113,7 +113,7 @@ export default function MulticoloredComponentsPage() {
       <h2>Output</h2>
       <CodeBlock language="javascript" smaller>
         {`
-const htmlOutput = processHTML(Example);
+const htmlOutput = processRichHTML(Example);
 const cssOutput = processCSS(Example);
 const links = Array.from(allLinks(Example));
 const invalidLinks = Array.from(validateLinks(links));
@@ -164,7 +164,7 @@ const invalidLinks = Array.from(validateLinks(links));
         {`
 const toString = (iter) => Array.from(iter).join("");
 
-const htmlOutput = toString(processHTML(Example));
+const htmlOutput = toString(processRichHTML(Example));
 const cssOutput = toString(processCSS(Example));
 const links = Array.from(allLinks(Example));
 `.trim()}
