@@ -30,15 +30,19 @@ export let links: LinksFunction = () => {
 
 function* Example() {
   yield HTML`<h1>Hello!</h1>`;
-  yield HTML`<p>This is HTML</p>`;
   yield HTML`<nav>`;
   yield Link("/", "Home");
   yield Link("/about", "About us");
   yield Link("/terms", "Terms");
   yield HTML`</nav>`;
+  yield HTML`<p>This is HTML</p>`;
   yield RemoteImage(
     "https://images.unsplash.com/photo-1530281700549-e82e7bf110d6?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80",
     "dog playing at the seaside"
+  );
+  yield RemoteImage(
+    "https://i.imgur.com/GleAY3fl.jpg",
+    "a tiger cub and its parent"
   );
 
   yield CSS("p", "color: red;");
@@ -54,6 +58,7 @@ export async function loader(args: Parameters<LoaderFunction>[0]) {
         "links"
       ),
       allLoadedOrigins: formatJavaScript(allLoadedOrigins.toString()),
+      processMetaLinkHTML: formatJavaScript(processMetaLinkHTML.toString()),
     },
   };
 }
@@ -130,6 +135,9 @@ const invalidLinks = Array.from(validateLinks(links));
       <NamedSection id="meta-links-html" heading={<h3>Meta Links HTML</h3>}>
         <CodeBlock language="javascript" smaller>
           {data.functionsSource.allLoadedOrigins}
+        </CodeBlock>
+        <CodeBlock language="javascript" smaller>
+          {data.functionsSource.processMetaLinkHTML}
         </CodeBlock>
         <CodeBlock language="json">
           {JSON.stringify(origins, null, 2)}

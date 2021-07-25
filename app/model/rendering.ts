@@ -7,7 +7,10 @@ export const identifiers = {
   image: "image",
 } as const;
 
-function taggedString(strings: TemplateStringsArray, ...values: Array<string | number>): string {
+function taggedString(
+  strings: TemplateStringsArray,
+  ...values: Array<string | number>
+): string {
   return Array.from(
     (function* () {
       for (const [i, s] of strings.entries()) {
@@ -17,7 +20,7 @@ function taggedString(strings: TemplateStringsArray, ...values: Array<string | n
         }
       }
     })()
-  ).join("")
+  ).join("");
 }
 
 const out = {
@@ -55,19 +58,15 @@ export type RenderingMessage = ReturnType<
 export function* processHTML(
   generator: () => Generator<RenderingMessage, void, void>
 ) {
-  const gen = generator();
-  while (true) {
-    const result = gen.next();
-    if (result.done) break;
-
-    if (result.value.type === identifiers.html) {
-      yield result.value.raw;
+  for (const message of generator()) {
+    if (message.type === identifiers.html) {
+      yield message.raw;
       yield "\n";
-    } else if (result.value.type === identifiers.link) {
-      yield `<a href="${result.value.to}">${result.value.text}</a>`;
+    } else if (message.type === identifiers.link) {
+      yield `<a href="${message.to}">${message.text}</a>`;
       yield "\n";
-    } else if (result.value.type === identifiers.remoteImage) {
-      yield `<img src="${result.value.url}" alt="${result.value.alt}">`;
+    } else if (message.type === identifiers.remoteImage) {
+      yield `<img src="${message.url}" alt="${message.alt}">`;
       yield "\n";
     }
   }
@@ -76,15 +75,11 @@ export function* processHTML(
 export function* processCSS(
   generator: () => Generator<RenderingMessage, void, void>
 ) {
-  const gen = generator();
-  while (true) {
-    const result = gen.next();
-    if (result.done) break;
-
-    if (result.value.type === identifiers.cssRule) {
-      yield result.value.selector.replace(/^/, "output ");
+  for (const message of generator()) {
+    if (message.type === identifiers.cssRule) {
+      yield message.selector.replace(/^/, "output ");
       yield " {";
-      yield result.value.rules;
+      yield message.rules;
       yield "}";
       yield "\n";
     }
@@ -94,13 +89,9 @@ export function* processCSS(
 export function* allLinks(
   generator: () => Generator<RenderingMessage, void, void>
 ) {
-  const gen = generator();
-  while (true) {
-    const result = gen.next();
-    if (result.done) break;
-
-    if (result.value.type === identifiers.link) {
-      yield result.value.to;
+  for (const message of generator()) {
+    if (message.type === identifiers.link) {
+      yield message.to;
     }
   }
 }
@@ -108,13 +99,9 @@ export function* allLinks(
 export function* allLoadedOrigins(
   generator: () => Generator<RenderingMessage, void, void>
 ) {
-  const gen = generator();
-  while (true) {
-    const result = gen.next();
-    if (result.done) break;
-
-    if (result.value.type === identifiers.remoteImage) {
-      const url = new URL(result.value.url);
+  for (const message of generator()) {
+    if (message.type === identifiers.remoteImage) {
+      const url = new URL(message.url);
       yield url.origin;
     }
   }
