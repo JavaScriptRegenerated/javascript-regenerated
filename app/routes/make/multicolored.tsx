@@ -8,6 +8,9 @@ import {
   processHTML,
   processCSS,
   allLinks,
+  RemoteImage,
+  allLoadedOrigins,
+  processMetaLinkHTML,
 } from "../../model/rendering";
 import { Await } from "../../types/helpers";
 import { CodeBlock } from "../../view/code";
@@ -33,6 +36,10 @@ function* Example() {
   yield Link("/about", "About us");
   yield Link("/terms", "Terms");
   yield HTML`</nav>`;
+  yield RemoteImage(
+    "https://images.unsplash.com/photo-1530281700549-e82e7bf110d6?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80",
+    "dog playing at the seaside"
+  );
 
   yield CSS("p", "color: red;");
   yield CSS("p:after", "color: blue; content: ' and this is CSS';");
@@ -42,15 +49,17 @@ export async function loader(args: Parameters<LoaderFunction>[0]) {
   return {
     functionsSource: {
       Example: formatJavaScript(Example.toString()),
-      validateLinks: formatJavaScript(validateLinks.toString()).replace(/links\d+/g, 'links'),
+      validateLinks: formatJavaScript(validateLinks.toString()).replace(
+        /links\d+/g,
+        "links"
+      ),
+      allLoadedOrigins: formatJavaScript(allLoadedOrigins.toString()),
     },
   };
 }
 
 function validateLinks(links: Iterable<string>): Set<string> {
-  const validLinks = new Set([
-    "/", "/about", "/hiring", "/privacy"
-  ]);
+  const validLinks = new Set(["/", "/about", "/hiring", "/privacy"]);
   const invalidLinks = new Set<string>();
   for (const link of links) {
     if (validLinks.has(link)) continue;
@@ -68,6 +77,8 @@ export default function MulticoloredComponentsPage() {
   const cssOutput = toString(processCSS(Example));
   const links = Array.from(allLinks(Example));
   const invalidLinks = Array.from(validateLinks(links));
+  const origins = Array.from(allLoadedOrigins(Example));
+  const metaLinkHTML = toString(processHTML(() => processMetaLinkHTML(Example)));
 
   return (
     <main data-measure="center">
@@ -76,38 +87,6 @@ export default function MulticoloredComponentsPage() {
       <CodeBlock language="javascript" smaller>
         {data.functionsSource.Example}
       </CodeBlock>
-      <CodeBlock language="javascript" smaller>
-        {`
-const htmlOutput = processHTML(Example);
-const cssOutput = processCSS(Example);
-const links = Array.from(allLinks(Example));
-const invalidLinks = Array.from(validateLinks(links));
-`.trim()}
-      </CodeBlock>
-      <h2>Output</h2>
-      <NamedSection
-        id="generated-html"
-        heading={<h3>Generated HTML</h3>}
-      >
-        <CodeBlock language="html">{htmlOutput}</CodeBlock>
-        <p>HTML: {countByteSize(htmlOutput)} bytes</p>
-      </NamedSection>
-      <NamedSection id="generated-css" heading={<h3>Generated CSS</h3>}>
-        <CodeBlock language="css">{cssOutput}</CodeBlock>
-        <p>CSS: {countByteSize(cssOutput)} bytes</p>
-      </NamedSection>
-      <NamedSection
-        id="generated-links"
-        heading={<h3>Generated Links</h3>}
-      >
-        <CodeBlock language="json">{JSON.stringify(links, null, 2)}</CodeBlock>
-      </NamedSection>
-      <NamedSection id="invalid-links" heading={<h3>Invalid Links</h3>}>
-        <CodeBlock language="javascript" smaller>
-          {data.functionsSource.validateLinks}
-        </CodeBlock>
-        <CodeBlock language="json">{JSON.stringify(invalidLinks, null, 2)}</CodeBlock>
-      </NamedSection>
       <NamedSection id="preview" heading={<h2>Output Preview</h2>}>
         <output
           className="X"
@@ -117,7 +96,49 @@ const invalidLinks = Array.from(validateLinks(links));
           <div dangerouslySetInnerHTML={{ __html: htmlOutput }}></div>
         </output>
       </NamedSection>
+      <h2>Output</h2>
+      <CodeBlock language="javascript" smaller>
+        {`
+const htmlOutput = processHTML(Example);
+const cssOutput = processCSS(Example);
+const links = Array.from(allLinks(Example));
+const invalidLinks = Array.from(validateLinks(links));
+`.trim()}
+      </CodeBlock>
+      <NamedSection id="generated-html" heading={<h3>Generated HTML</h3>}>
+        <CodeBlock language="html">{htmlOutput}</CodeBlock>
+        <p>HTML: {countByteSize(htmlOutput)} bytes</p>
+      </NamedSection>
+      <NamedSection id="generated-css" heading={<h3>Generated CSS</h3>}>
+        <CodeBlock language="css">{cssOutput}</CodeBlock>
+        <p>CSS: {countByteSize(cssOutput)} bytes</p>
+      </NamedSection>
+      <NamedSection id="generated-links" heading={<h3>Generated Links</h3>}>
+        <CodeBlock language="json">{JSON.stringify(links, null, 2)}</CodeBlock>
+      </NamedSection>
+      <NamedSection id="invalid-links" heading={<h3>Invalid Links</h3>}>
+        <CodeBlock language="javascript" smaller>
+          {data.functionsSource.validateLinks}
+        </CodeBlock>
+        <CodeBlock language="json">
+          {JSON.stringify(invalidLinks, null, 2)}
+        </CodeBlock>
+      </NamedSection>
+
       <hr data-y="100vh" />
+
+      <NamedSection id="meta-links-html" heading={<h3>Meta Links HTML</h3>}>
+        <CodeBlock language="javascript" smaller>
+          {data.functionsSource.allLoadedOrigins}
+        </CodeBlock>
+        <CodeBlock language="json">
+          {JSON.stringify(origins, null, 2)}
+        </CodeBlock>
+        <CodeBlock language="html">{metaLinkHTML}</CodeBlock>
+      </NamedSection>
+
+      <hr data-y="100vh" />
+
       <CodeBlock language="javascript" smaller>
         {`
 const toString = (iter) => Array.from(iter).join("");
