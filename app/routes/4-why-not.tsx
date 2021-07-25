@@ -40,6 +40,9 @@ export default function LibrariesPage() {
             <code>{"apiRequest = f(form)"}</code>
           </li>
           <li>
+            <code>{"sanitizedData = f(untrustedInput)"}</code>
+          </li>
+          <li>
             <code>{"state = f(events)"}</code>
           </li>
           <li>
