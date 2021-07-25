@@ -24,7 +24,8 @@ footer[role="contentinfo"] {
   text-align: center;
 }
 
-pre[class*=language-] {
+pre, pre[class*=language-], code[class*=language-] {
+  text-align: left;
   font-family: var(--font-mono) !important;
   font-size: var(--size--1);
   line-height: 1.45 !important;
