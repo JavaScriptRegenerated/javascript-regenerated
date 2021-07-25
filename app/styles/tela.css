@@ -118,6 +118,9 @@ nav {
 [data-p~="1/2"] {
   padding: 0.5rem;
 }
+[data-p~="b1"] {
+  padding-bottom: 1rem;
+}
 
 [data-w-max="md"] {
   max-width: var(--md);

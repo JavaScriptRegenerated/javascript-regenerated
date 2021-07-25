@@ -1,67 +1,93 @@
+import type { ComponentProps } from "react";
+import { useLocation } from "react-router-dom";
+
+function NavLink(props: ComponentProps<"a">): JSX.Element {
+  const location = useLocation();
+
+  const ariaCurrent = location.pathname === props.href ? "page" : undefined;
+
+  return <a aria-current={ariaCurrent} {...props} />;
+}
+
 export const makeNavItems = (
   <>
     <li>
-      <a href="/make/html-renderer">{"HTML renderer"}</a>
+      <NavLink href="/make/html-renderer">{"HTML renderer"}</NavLink>
     </li>
     <li>
-      <a href="/make/schema">{"Schema validator"}</a>
+      <NavLink href="/make/schema">{"Schema validator"}</NavLink>
     </li>
     <li>
-      <a href="/make/parser">{"Parser"}</a>
+      <NavLink href="/make/parser">{"Parser"}</NavLink>
     </li>
     <li>
-      <a href="/make/state-machine">{"State machine"}</a>
+      <NavLink href="/make/state-machine">{"State machine"}</NavLink>
     </li>
     <li>
-      <a href="/make/multicolored">{"Multicolored components"}</a>
+      <NavLink href="/make/multicolored">{"Multicolored components"}</NavLink>
     </li>
   </>
 );
 
-export function PrimaryNavigation() {
+export function PrimaryNavigation({
+  name = "Primary",
+  includeHome = false,
+}: {
+  name?: string;
+  includeHome?: boolean;
+}) {
   return (
-    <nav>
+    <nav aria-label={name}>
       <ul>
+        {includeHome && (
+          <li>
+            <NavLink href="/">{"Home"}</NavLink>
+          </li>
+        )}
         <li>
-          <a href="/1-linear">{"Linear thinking"}</a>
+          <NavLink href="/1-linear">{"Linear thinking"}</NavLink>
         </li>
         <li>
-          <a href="/1-objects">{"Object-oriented"}</a>
+          <NavLink href="/1-objects">{"Object-oriented"}</NavLink>
         </li>
         <li>
-          <a href="/1-what-not-how">{"What, not how"}</a>
+          <NavLink href="/1-what-not-how">{"What, not how"}</NavLink>
         </li>
         <li>
-          <a href="/1-hard-things">{"Two hardest things"}</a>
+          <NavLink href="/1-hard-things">{"Two hardest things"}</NavLink>
         </li>
         <li role="separator" data-y="1" />
         <li>
-          <a href="/2-methods-vs-messages">{"Methods vs messages"}</a>
+          <NavLink href="/2-methods-vs-messages">
+            {"Methods vs messages"}
+          </NavLink>
         </li>
         <li>
-          <a href="/2-message-generators">{"Message generators"}</a>
+          <NavLink href="/2-message-generators">{"Message generators"}</NavLink>
         </li>
         <li>
-          <a href="/3-message-processors">{"Message processors"}</a>
+          <NavLink href="/3-message-processors">{"Message processors"}</NavLink>
         </li>
         <li>
-          <a href="/3-sending-functions">{"Sending functions"}</a>
+          <NavLink href="/3-sending-functions">{"Sending functions"}</NavLink>
         </li>
         <li role="separator" data-y="1" />
         {makeNavItems}
         <li role="separator" data-y="1" />
         <li>
-          <a href="/4-function-of">{"More than the view"}</a>
+          <NavLink href="/4-function-of">{"More than the view"}</NavLink>
         </li>
         <li>
-          <a href="/4-javascript-everywhere">{"JavaScript’s benefits"}</a>
+          <NavLink href="/4-javascript-everywhere">
+            {"JavaScript’s benefits"}
+          </NavLink>
         </li>
         <li>
-          <a href="/5-libraries">{"Open source libraries"}</a>
+          <NavLink href="/5-libraries">{"Open source libraries"}</NavLink>
         </li>
         <li role="separator" data-y="1" />
         <li>
-          <a href="/5-thanks">{"Thanks"}</a>
+          <NavLink href="/5-thanks">{"Thanks"}</NavLink>
         </li>
       </ul>
     </nav>
