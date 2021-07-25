@@ -50,7 +50,7 @@ const textIndent = 30;
 const textY = (index: number) => index * 20 + 20;
 const iconY = (index: number) => index * 20 + 12;
 
-function MessagePrimitivesGraphic(): JSX.Element {
+function MessageProcessorsGraphic(): JSX.Element {
   return (
     <svg viewBox="0 0 180 220">
       <rect width="100%" height="100%" fill="black" />
@@ -226,11 +226,11 @@ NSNumber *amount = @1;
   );
 }
 
-export default function MessagePrimitivesPage() {
+export default function MessageProcessorsPage() {
   return (
     <main data-measure="center" data-text="center">
       <h1>Message Processors</h1>
-      <MessagePrimitivesGraphic />
+      <MessageProcessorsGraphic />
 
       {/* <hr data-y="100vh" /> */}
     </main>

@@ -36,11 +36,12 @@ export function PrimaryNavigation() {
         <li>
           <Link to="/1-components">{"Component mindset"}</Link>
         </li>
+        <li role="separator" data-y="1" />
         <li>
-          <Link to="/2-method-is-unit">{"Methods vs messages"}</Link>
+          <Link to="/2-methods-vs-messages">{"Methods vs messages"}</Link>
         </li>
         <li>
-          <Link to="/2-message-primitives">{"Message generators"}</Link>
+          <Link to="/2-message-generators">{"Message generators"}</Link>
         </li>
         <li>
           <Link to="/3-message-processors">{"Message processors"}</Link>

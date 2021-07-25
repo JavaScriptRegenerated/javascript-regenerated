@@ -95,7 +95,7 @@ function MessagePrimitivesGraphic(): JSX.Element {
   );
 }
 
-function MessagePrimitivesCode() {
+function MethodsVsPrimitivesCode() {
   return (
     <>
       <h2>JavaScript classes allow calling methods</h2>
@@ -143,13 +143,11 @@ NSNumber *amount = @1;
   );
 }
 
-export default function MessagePrimitivesPage() {
+export default function MethodsVsPrimitivesPage() {
   return (
     <main data-measure="center" data-text="center">
       <h1>Methods vs Messages</h1>
-      <MessagePrimitivesCode />
-
-      {/* <hr data-y="100vh" /> */}
+      <MethodsVsPrimitivesCode />
     </main>
   );
 }
