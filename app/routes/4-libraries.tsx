@@ -29,12 +29,14 @@ export default function LibrariesPage() {
         </ul>
       </nav>
 
-      <h2>{'Learn More'}</h2>
+      <hr data-y="100vh" />
+
+      <h2>{'Learn More!'}</h2>
       <nav data-text="1">
-        <p data-p="b1">I write about generator functions, accessibility, modern web technologies, and design.</p>
+        <p data-p="b1" data-text="italic">I write about generator functions, accessibility, modern web technologies, and design.</p>
         <ul {...Y(1)}>
-          <li><a href="https://regenerated.dev/">Regenerated.Dev</a> focuses specifically on patterns for generator functions</li>
-          <li><a href="https://components.guide/">Components.Guide</a> explores accessibility, React, and modern web standards.</li>
+          <li><a href="https://regenerated.dev/" data-text="bold" style={{ color: "#EF4444" }}>Regenerated.Dev</a> focuses specifically on patterns for generator functions.</li>
+          <li><a href="https://components.guide/" data-text="bold" style={{ color: "#60A5FA" }}>Components.Guide</a> explores accessibility, React, and modern web standards.</li>
         </ul>
       </nav>
     </main>
