@@ -4,7 +4,6 @@ import {
   loadSimpleIcons,
   typeLoadedIconComponent,
 } from "../view/icons";
-import { CodeBlock } from "../view/code";
 
 export let meta: MetaFunction = () => {
   return {
