@@ -8,7 +8,7 @@ import { loadHeroIcons, typeLoadedIconComponent } from "../view/icons";
 
 export let meta: MetaFunction = () => {
   return {
-    title: "Remix Starter",
+    title: "JavaScript Regenerated",
     description: "Welcome to remix!",
   };
 };

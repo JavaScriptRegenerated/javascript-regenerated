@@ -23,7 +23,7 @@ export default function LibrariesPage() {
       <nav data-text="1">
         <ul {...Y(1)}>
           <li>
-            <code>{"route = f(url)"}</code>
+            <code>{"view = f(data)"}</code>
           </li>
         </ul>
       </nav>
@@ -44,6 +44,9 @@ export default function LibrariesPage() {
           </li>
           <li>
             <code>{"state = f(events)"}</code>
+          </li>
+          <li>
+            <code>{"animationFrame = f(time)"}</code>
           </li>
           <li>
             <code>{"cssVariables = f(tokens)"}</code>

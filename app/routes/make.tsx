@@ -5,7 +5,7 @@ import { makeNavItems } from "../navs/primary";
 
 export let meta: MetaFunction = () => {
   return {
-    title: "Remix Starter",
+    title: "Making Component Generators: JavaScript Regenerated",
     description: "Welcome to remix!",
   };
 };
