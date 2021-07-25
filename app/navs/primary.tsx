@@ -12,6 +12,9 @@ export const makeNavItems = (
       <a href="/make/parser">{"Parser"}</a>
     </li>
     <li>
+      <a href="/make/state-machine">{"State machine"}</a>
+    </li>
+    <li>
       <a href="/make/multiproducers">{"Multicolored components"}</a>
     </li>
   </>
