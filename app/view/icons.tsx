@@ -52,14 +52,16 @@ export async function loadHeroIcons(
 interface LoadedIconProps<Name extends string>
   extends Pick<React.SVGProps<SVGElement>, "width" | "height" | "x" | "y" | "fill" | "stroke"> {
   name: Name;
+  color?: string;
 }
 export function LoadedIcon<Name extends string>({
   name,
+  color,
   ...rest
 }: LoadedIconProps<Name>) {
   const { icons } = useRouteData();
 
-  return <svg {...rest} dangerouslySetInnerHTML={{ __html: icons[name] }} />;
+  return <svg {...rest} dangerouslySetInnerHTML={{ __html: icons[name] }} style={color != null ? { color } : undefined} />;
 }
 
 export function typeLoadedIconComponent<Name extends string>(): (
