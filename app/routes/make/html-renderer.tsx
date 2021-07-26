@@ -63,7 +63,7 @@ export default function MakeRenderer() {
         </div>
       </NamedSection>
 
-      <NamedSection id="source-html-producer" heading={<h2>HTML Processor</h2>}>
+      <NamedSection id="source-html-processor" heading={<h2>HTML Processor</h2>}>
         <CodeBlock language="javascript">{processHTML.toString()}</CodeBlock>
 
         <h3>Convert to a single string</h3>

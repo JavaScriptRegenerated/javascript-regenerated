@@ -103,7 +103,7 @@ export default function MakeRenderer() {
       <AWSRegionSection />
 
       <NamedSection
-        id="source-html-producer"
+        id="parser-processor"
         heading={<h2>Parser Processor</h2>}
       >
         <CodeBlock language="javascript">{parseString.toString()}</CodeBlock>

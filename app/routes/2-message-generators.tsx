@@ -8,7 +8,7 @@ import { CodeBlock } from "../view/code";
 
 export let meta: MetaFunction = () => {
   return {
-    title: "Message Primitives: JavaScript Regenerated",
+    title: "Message Generators: JavaScript Regenerated",
     description: "",
   };
 };

@@ -17,8 +17,12 @@ export let links: LinksFunction = () => {
   return [];
 };
 
+const textIndent = 30;
+const textY = (index: number) => index * 20 + 20;
+const iconY = (index: number) => index * 20 + 12;
+
 const simpleIcons = [] as const;
-const heroIcons = [] as const;
+const heroIcons = ["solid/annotation.svg", "solid/cog.svg"] as const;
 
 export let loader: LoaderFunction = async () => {
   return {
@@ -28,6 +32,10 @@ export let loader: LoaderFunction = async () => {
     },
   };
 };
+
+const LoadedIcon = typeLoadedIconComponent<
+  typeof simpleIcons[-1] | typeof heroIcons[-1]
+>();
 
 function MethodsVsPrimitivesCode() {
   return (
@@ -77,11 +85,83 @@ NSNumber *amount = @1;
   );
 }
 
+function GeneratorComponentsPiecesGraphic(): JSX.Element {
+  return (
+    <svg viewBox="0 0 180 60">
+      <rect width="100%" height="100%" fill="black" />
+      <g x="20" fontSize="6" fill="white" letterSpacing={0.05}>
+        <LoadedIcon
+          name="solid/annotation.svg"
+          width={12}
+          height={12}
+          x={10}
+          y={iconY(0)}
+        />
+        <text x={textIndent} y={textY(0)}>
+          <tspan fontWeight="bold">Message generators: </tspan>
+        </text>
+        <text x={textIndent} y={textY(0) + 8}>
+          <tspan>Generators functions that send messages.</tspan>
+        </text>
+
+        <LoadedIcon
+          name="solid/cog.svg"
+          width={12}
+          height={12}
+          x={10}
+          y={iconY(1)}
+        />
+        <text x={textIndent} y={textY(1)}>
+          <tspan fontWeight="bold">Message processors: </tspan>
+        </text>
+        <text x={textIndent} y={textY(1) + 8}>
+          <tspan>
+            Call the above and transform its messages into a result.
+          </tspan>
+        </text>
+      </g>
+    </svg>
+  );
+}
+
+function GeneratorComponentsPiecesCode(): JSX.Element {
+  return (
+    <>
+      <h2>Sum numbers</h2>
+      <CodeBlock language="javascript" smaller>
+        {`
+function* GenerateNumbers() {
+  yield 1;
+  yield 2;
+  yield 3;
+}
+
+function sum(messageGenerator) {
+  let total = 0;
+  for (const message of messageGenerator()) {
+    total += message;
+  }
+  return total;
+}
+
+sum(GenerateNumbers);
+// 6
+`.trim()}
+      </CodeBlock>
+    </>
+  );
+}
+
 export default function MethodsVsPrimitivesPage() {
   return (
     <main data-measure="center" data-text="center">
       <h1>Methods vs Messages</h1>
       <MethodsVsPrimitivesCode />
+
+      <hr data-y="100vh" />
+
+      <GeneratorComponentsPiecesGraphic />
+      <GeneratorComponentsPiecesCode />
     </main>
   );
 }
