@@ -44,39 +44,39 @@ function MethodsVsPrimitivesCode() {
       <CodeBlock language="javascript" smaller>
         {`
 class Counter {
-  incrementBy(amount) {
+  add(amount) {
     // Code I write
   }
 }
 
 const counter = new Counter();
-// Call increment method.
-counter.incrementBy(1);
+// Call add method.
+counter.add(1);
 `.trim()}
       </CodeBlock>
       <h2>Objective-C classes allow sending messages</h2>
       <CodeBlock language="objc" smaller>
         {`
-// Send increment message.
-[counter incrementBy:@1];
+// Send add message.
+[counter add:@1];
 
 // Here is the identifier for this message.
-SEL messageIdentifier = @selector(incrementBy:);
+SEL messageIdentifier = @selector(add:);
 
-// Send increment message.
-[counter performSelector:@selector(incrementBy:) withObject:@1];
+// Send add message.
+[counter performSelector:@selector(add:) withObject:@1];
 
 // Create message ready to send.
 // Yes, it is a fair amount of code…
 NSMethodSignature *signature = [Counter
-  instanceMethodSignatureForSelector:@selector(incrementBy:)];
+  instanceMethodSignatureForSelector:@selector(add:)];
 NSInvocation *sender = [NSInvocation
   invocationWithMethodSignature:signature];
 NSNumber *amount = @1;
 [sender setArgument:&amount atIndex:2];
 [sender setTarget:counter];
 
-// Now, let’s send the increment message twice.
+// Now, let’s send the add message twice.
 [sender invoke];
 [sender invoke];
 `.trim()}
@@ -116,7 +116,7 @@ function GeneratorComponentsPiecesGraphic(): JSX.Element {
         </text>
         <text x={textIndent} y={textY(1) + 8}>
           <tspan>
-            Call the above and transform its messages into a result.
+            Calls the above and transform its messages into a result.
           </tspan>
         </text>
       </g>
@@ -127,16 +127,18 @@ function GeneratorComponentsPiecesGraphic(): JSX.Element {
 function GeneratorComponentsPiecesCode(): JSX.Element {
   return (
     <>
-      <h2>Sum numbers</h2>
+      <h2>Adding sent numbers</h2>
       <CodeBlock language="javascript" smaller>
         {`
+// This is our message generator:
 function* GenerateNumbers() {
-  yield 1;
-  yield 2;
-  yield 3;
+  yield 1; // These
+  yield 2; // are
+  yield 3; // our messages
 }
 
-function sum(messageGenerator) {
+// This is our message processor:
+function adder(messageGenerator) {
   let total = 0;
   for (const message of messageGenerator()) {
     total += message;
@@ -144,7 +146,7 @@ function sum(messageGenerator) {
   return total;
 }
 
-sum(GenerateNumbers);
+adder(GenerateNumbers);
 // 6
 `.trim()}
       </CodeBlock>
