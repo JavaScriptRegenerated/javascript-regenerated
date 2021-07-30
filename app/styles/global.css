@@ -19,6 +19,7 @@
   font-size: 200%;
   color: #D9FFFF;
   background-color: var(--bg);
+  zoom: 175%;
 }
 body {
   font-family: var(--font-sans);
