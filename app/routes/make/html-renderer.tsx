@@ -69,7 +69,7 @@ export default function MakeRenderer() {
         <h3>Convert to a single string</h3>
         <CodeBlock language="javascript" smaller>
           {`
-const generator = processHTML(Example);
+const generator = processHTML(HTMLComponent);
 const htmlString = Array.from(generator).join("");
 `.trim()}
         </CodeBlock>
@@ -77,7 +77,7 @@ const htmlString = Array.from(generator).join("");
         <h3>Convert to <a href="https://developer.mozilla.org/en-US/docs/Web/API/ReadableStream">readable stream</a></h3>
         <CodeBlock language="javascript" smaller>
           {`
-const generator = processHTML(Example);
+const generator = processHTML(HTMLComponent);
 const sream = new ReadableStream({
   pull(controller) {
     const { value, done } = generator.next();
