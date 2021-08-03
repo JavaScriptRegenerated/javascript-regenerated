@@ -2,7 +2,7 @@ import type { MetaFunction, LinksFunction, LoaderFunction } from "remix";
 import { useRouteData } from "remix";
 import {
     Disabled,
-  LabelledTextInput,
+  Textbox,
   previewJAWS,
   previewVoiceOver,
   processHTML,
@@ -24,14 +24,16 @@ export let links: LinksFunction = () => {
 };
 
 function* HTMLComponent() {
-  yield LabelledTextInput("First name");
-  yield LabelledTextInput("Last name", [Disabled]);
+  yield Textbox("First name");
+  yield Textbox("Last name", [Disabled]);
 }
 
 export async function loader(args: Parameters<LoaderFunction>[0]) {
   return {
     functionsSource: {
       HTMLComponent: formatJavaScript(HTMLComponent.toString()),
+      previewJAWS: formatJavaScript(previewJAWS.toString()),
+      previewVoiceOver: formatJavaScript(previewVoiceOver.toString()),
     },
   };
 }
@@ -62,7 +64,10 @@ export default function MakeRenderer() {
       </NamedSection>
 
       <NamedSection id="jaws-processor" heading={<h2>JAWS Processor</h2>}>
-        <CodeBlock language="javascript">{previewJAWS.toString()}</CodeBlock>
+        <CodeBlock language="javascript">{data.functionsSource.previewJAWS.toString()}</CodeBlock>
+      </NamedSection>
+      <NamedSection id="voiceover-processor" heading={<h2>VoiceOver Processor</h2>}>
+        <CodeBlock language="javascript">{data.functionsSource.previewVoiceOver.toString()}</CodeBlock>
       </NamedSection>
     </main>
   );

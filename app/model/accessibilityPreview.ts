@@ -10,7 +10,7 @@ export const ids = {
   fieldset,
 } as const;
 
-export function LabelledTextInput(
+export function Textbox(
   name: string,
   options: Array<typeof Disabled> = []
 ) {
@@ -31,7 +31,7 @@ export function Button(name: string, options: Array<typeof Disabled> = []) {
 
 export function Fieldset(
   legend: string,
-  children: Array<ReturnType<typeof LabelledTextInput | typeof Button>>,
+  children: Array<ReturnType<typeof Textbox | typeof Button>>,
   options: Array<typeof Disabled> = []
 ) {
   return Object.freeze({
@@ -43,7 +43,7 @@ export function Fieldset(
 }
 
 export type RenderingMessage = ReturnType<
-  typeof LabelledTextInput | typeof Button | typeof Fieldset
+  typeof Textbox | typeof Button | typeof Fieldset
 >;
 
 export function* processHTML(
