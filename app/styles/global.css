@@ -35,6 +35,10 @@ nav a[aria-current="page"] {
   font-weight: bold;
 }
 
+output {
+  display: block;
+}
+
 pre, pre[class*=language-], code[class*=language-] {
   font-family: var(--font-mono) !important;
 }
