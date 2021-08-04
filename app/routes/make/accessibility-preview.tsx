@@ -39,7 +39,7 @@ export async function loader(args: Parameters<LoaderFunction>[0]) {
 }
 
 export default function MakeRenderer() {
-  let data: Await<ReturnType<typeof loader>> = useRouteData();
+  const data: Await<ReturnType<typeof loader>> = useRouteData();
 
   const outputHTML = Array.from(processHTML(HTMLComponent)).join("");
   const outputJAWS = Array.from(previewJAWS(HTMLComponent)).join("\n");

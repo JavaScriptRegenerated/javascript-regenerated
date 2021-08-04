@@ -1,4 +1,9 @@
-import type { MetaFunction, LinksFunction, LoaderFunction } from "remix";
+import {
+  MetaFunction,
+  LinksFunction,
+  LoaderFunction,
+  useRouteData,
+} from "remix";
 import { X, Y } from "../../view/structure";
 import { NamedSection } from "../../view/semantics";
 import { CodeBlock } from "../../view/code";
@@ -10,6 +15,8 @@ import {
   read,
   SchemaGenerator,
 } from "../../model/schemas";
+import { formatJavaScript } from "../../view/codeFormatting";
+import { Await } from "../../types/helpers";
 
 export let meta: MetaFunction = () => {
   return {
@@ -22,9 +29,20 @@ export let links: LinksFunction = () => {
   return [];
 };
 
-export let loader: LoaderFunction = async () => {
-  return {};
-};
+export async function loader(args: Parameters<LoaderFunction>[0]) {
+  return {
+    source: {
+      components: {
+        ProfileSchema: formatJavaScript(ProfileSchema.toString()),
+        AWSRegionSchema: formatJavaScript(AWSRegionSchema.toString()),
+      },
+      functions: {
+        parseFormData: formatJavaScript(parseFormData.toString()),
+        parseJSON: formatJavaScript(parseJSON.toString()),
+      },
+    },
+  };
+}
 
 function useFetch<Data>(source: URL): null | Data {
   const [data, setData] = useState<Data | null>(null);
@@ -105,6 +123,8 @@ function* SwapiPersonResource(): SchemaGenerator<SwapiPersonData> {
 }
 
 export default function MakeRenderer() {
+  const data: Await<ReturnType<typeof loader>> = useRouteData();
+
   function renderExample(input: any): JSX.Element {
     const result = parseJSON(input, AWSRegionSchema);
 
@@ -124,23 +144,29 @@ export default function MakeRenderer() {
     favoriteNumber: 7,
   });
 
-  const personDataRaw: any = useFetch(new URL(`https://swapi.py4e.com/api/people/1`));
-  const personData = personDataRaw != null ? parseJSON(personDataRaw, SwapiPersonSchema) : null;
-  // const personData = personDataRaw;
+  const personDataRaw: any = useFetch(
+    new URL(`https://swapi.py4e.com/api/people/1`)
+  );
+  const personData =
+    personDataRaw != null ? parseJSON(personDataRaw, SwapiPersonSchema) : null;
 
   return (
     <main data-measure="center">
       <h1>Schema</h1>
 
       <h2>JSON</h2>
-      <CodeBlock language="javascript">{parseJSON.toString()}</CodeBlock>
+      <CodeBlock language="javascript">
+        {data.source.functions.parseJSON}
+      </CodeBlock>
 
       <h2>Form Data</h2>
-      <CodeBlock language="javascript">{parseFormData.toString()}</CodeBlock>
+      <CodeBlock language="javascript">
+        {data.source.functions.parseFormData}
+      </CodeBlock>
 
       <NamedSection id="aws-region-schema" heading={<h2>AWS Region Schema</h2>}>
         <CodeBlock language="javascript">
-          {AWSRegionSchema.toString()}
+          {data.source.components.AWSRegionSchema}
         </CodeBlock>
 
         <h3>Results</h3>
@@ -148,7 +174,9 @@ export default function MakeRenderer() {
       </NamedSection>
 
       <NamedSection id="profile-form" heading={<h2>Profile Form</h2>}>
-        <CodeBlock language="javascript">{ProfileSchema.toString()}</CodeBlock>
+        <CodeBlock language="javascript">
+          {data.source.components.ProfileSchema}
+        </CodeBlock>
 
         <h3>Interactive Preview</h3>
         <form
