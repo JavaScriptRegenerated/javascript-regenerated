@@ -6,7 +6,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import {
   parseFormData,
-  parseSchema,
+  parseJSON,
   read,
   SchemaGenerator,
 } from "../../model/schemas";
@@ -30,7 +30,6 @@ function useFetch<Data>(source: URL): null | Data {
   const [data, setData] = useState<Data | null>(null);
 
   useEffect(() => {
-    console.log("Fetching");
     const controller = new AbortController();
     const signal = controller.signal;
 
@@ -77,9 +76,37 @@ function* ProfileSchema(): SchemaGenerator<ProfileData> {
   };
 }
 
+interface SwapiPersonData {
+  name: string;
+  height: string;
+  mass: string;
+}
+function* SwapiPersonSchema(): SchemaGenerator<SwapiPersonData> {
+  const name: string = yield read.string("name");
+  const height: string = yield read.string("height");
+  const mass: string = yield read.string("mass");
+
+  return {
+    name,
+    height,
+    mass,
+  };
+}
+function* SwapiPersonResource(): SchemaGenerator<SwapiPersonData> {
+  const name: string = yield read.string("name");
+  const height: string = yield read.string("height");
+  const mass: string = yield read.string("mass");
+
+  return {
+    name,
+    height,
+    mass,
+  };
+}
+
 export default function MakeRenderer() {
   function renderExample(input: any): JSX.Element {
-    const result = parseSchema(input, AWSRegionSchema);
+    const result = parseJSON(input, AWSRegionSchema);
 
     return (
       <div {...X(2)}>
@@ -97,14 +124,16 @@ export default function MakeRenderer() {
     favoriteNumber: 7,
   });
 
-  const personData = useFetch(new URL(`https://swapi.py4e.com/api/people/1`));
+  const personDataRaw: any = useFetch(new URL(`https://swapi.py4e.com/api/people/1`));
+  const personData = personDataRaw != null ? parseJSON(personDataRaw, SwapiPersonSchema) : null;
+  // const personData = personDataRaw;
 
   return (
     <main data-measure="center">
       <h1>Schema</h1>
 
       <h2>JSON</h2>
-      <CodeBlock language="javascript">{parseSchema.toString()}</CodeBlock>
+      <CodeBlock language="javascript">{parseJSON.toString()}</CodeBlock>
 
       <h2>Form Data</h2>
       <CodeBlock language="javascript">{parseFormData.toString()}</CodeBlock>

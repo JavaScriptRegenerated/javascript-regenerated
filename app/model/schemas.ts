@@ -23,7 +23,7 @@ export type SchemaGenerator<Result> = Generator<
   SchemaReply | any
 >;
 
-export function parseSchema<Result>(
+export function parseJSON<Result>(
   source: Record<string, any>,
   generator: () => SchemaGenerator<Result>
 ) {
