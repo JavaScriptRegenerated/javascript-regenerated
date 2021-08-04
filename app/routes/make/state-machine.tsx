@@ -6,7 +6,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import {
   parseFormData,
-  parseSchema,
+  parseJSON,
   read,
   SchemaGenerator,
 } from "../../model/schemas";
