@@ -20,7 +20,8 @@ export let loader: LoaderFunction = async () => {
 
 function Document({ children }: { children: React.ReactNode }) {
   function onKeyPress(e: React.KeyboardEvent<HTMLBodyElement>): void {
-    console.log(e.type, e.key);
+    if (e.target instanceof Node && e.target !== document.body && document.body.contains(e.target)) return;
+
     if (e.key === "?") {
       const quickNav = document.getElementById("QuickNav")!;
       quickNav.classList.toggle('visible');
