@@ -1,20 +1,43 @@
-export const identifiers = {
+export const types = {
   string: "string",
   number: "number",
+  array: "array",
 } as const;
 
+function readString(name: string) {
+  return {
+    type: types.string,
+    name,
+  };
+}
+
+function readNumber(name: string) {
+  return {
+    type: types.number,
+    name,
+  };
+}
+
+function readArray(name: string, itemType: typeof types.string | typeof types.number) {
+  return {
+    type: types.array,
+    name,
+    itemType,
+  };
+}
+
 export const read = {
-  string: (name: string) => ({
-    type: identifiers.string,
-    name,
-  }),
-  number: (name: string) => ({
-    type: identifiers.number,
-    name,
-  }),
+  string: readString,
+  number: readNumber,
+  array: readArray,
 };
 
-export type SchemaMessage = ReturnType<typeof read.string | typeof read.number>;
+export type SchemaMessagePrimitive = ReturnType<
+  typeof readString | typeof readNumber
+>;
+export type SchemaMessage = ReturnType<
+  typeof readString | typeof readNumber | typeof readArray
+>;
 export type SchemaReply = string | number;
 // export type SchemaGenerator<Result> = Generator<ReturnType<typeof read.string>, Result, string> | Generator<ReturnType<typeof read.number>, Result, number>;
 export type SchemaGenerator<Result> = Generator<
@@ -24,7 +47,7 @@ export type SchemaGenerator<Result> = Generator<
 >;
 
 export function parseJSON<Result>(
-  source: Record<string, any>,
+  source: unknown,
   generator: () => SchemaGenerator<Result>
 ) {
   const gen = generator();
@@ -38,13 +61,21 @@ export function parseJSON<Result>(
 
     reply = undefined;
 
-    if (result.value.type === identifiers.string) {
-      if (typeof source[result.value.name] === "string") {
-        reply = source[result.value.name];
-      }
-    } else if (result.value.type === identifiers.number) {
-      if (typeof source[result.value.name] === "number") {
-        reply = source[result.value.name];
+    if (source instanceof Object && result.value.name in source) {
+      if (result.value.type === types.string) {
+        if (typeof (source as any)[result.value.name] === "string") {
+          reply = (source as any)[result.value.name];
+        }
+      } else if (result.value.type === types.number) {
+        if (typeof (source as any)[result.value.name] === "number") {
+          reply = (source as any)[result.value.name];
+        }
+      } else if (result.value.type === types.array) {
+        const itemType = result.value.itemType;
+        if (Array.isArray((source as any)[result.value.name])) {
+          const sanitizedItems = (source as any)[result.value.name].map((x: any) => typeof x === itemType ? x : null);
+          reply = sanitizedItems;
+        }
       }
     }
   }
@@ -65,11 +96,11 @@ export function parseFormData<Result>(
 
     reply = undefined;
 
-    if (result.value.type === identifiers.string) {
+    if (result.value.type === types.string) {
       if (source.has(result.value.name)) {
         reply = source.get(result.value.name) as string;
       }
-    } else if (result.value.type === identifiers.number) {
+    } else if (result.value.type === types.number) {
       if (source.has(result.value.name)) {
         reply = parseFloat(source.get(result.value.name) as string);
       }

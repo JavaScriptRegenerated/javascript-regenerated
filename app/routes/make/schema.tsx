@@ -14,10 +14,12 @@ import {
   parseJSON,
   read,
   SchemaGenerator,
+  types,
 } from "../../model/schemas";
 import { formatJavaScript } from "../../view/codeFormatting";
-import { Await } from "../../types/helpers";
+import { Await, FinalResult } from "../../types/helpers";
 import { fetchController, FetchGenerator, getJSON } from "../../model/fetching";
+import { useMemo } from "react";
 
 export let meta: MetaFunction = () => {
   return {
@@ -109,35 +111,41 @@ interface SwapiPersonData {
   name: string;
   height: string;
   mass: string;
+  films: string[];
 }
 function* SwapiPersonSchema(): SchemaGenerator<SwapiPersonData> {
   const name: string = yield read.string("name");
   const height: string = yield read.string("height");
   const mass: string = yield read.string("mass");
+  const films: string[] = yield read.array("films", types.string);
 
   return {
     name,
     height,
     mass,
+    films
   };
 }
-function* SwapiPersonResource(): FetchGenerator<SwapiPersonData> {
-  const rawData = yield getJSON(new URL(`https://swapi.py4e.com/api/people/1`));
+function* SwapiPersonResource() {
+  const rawData: unknown = yield getJSON(new URL(`https://swapi.py4e.com/api/people/1`));
   
   const parsedData = parseJSON(rawData, function* Schema() {
     const name: string = yield read.string("name");
     const height: string = yield read.string("height");
     const mass: string = yield read.string("mass");
+    const films: string[] = yield read.array("films", types.string);
 
     return {
       name,
       height,
-      mass: mass,
+      mass,
+      films
     };
   });
 
   return parsedData;
 }
+type SwapiPersonData2 = FinalResult<ReturnType<typeof SwapiPersonResource>>
 
 export default function MakeRenderer() {
   const data: Await<ReturnType<typeof loader>> = useRouteData();
@@ -167,7 +175,10 @@ export default function MakeRenderer() {
   const personData =
     personDataRaw != null ? parseJSON(personDataRaw, SwapiPersonSchema) : null;
 
-  const [personPromise] = useState(() => fetchController(new URL('https://swapi.py4e.com/'), SwapiPersonResource));
+  const personPromise = useMemo(
+    () => fetchController(new URL("https://swapi.py4e.com/"), SwapiPersonResource),
+    []
+  );
   const personData2 = usePromise(personPromise);
 
   return (
