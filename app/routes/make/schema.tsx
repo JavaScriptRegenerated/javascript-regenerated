@@ -17,6 +17,7 @@ import {
 } from "../../model/schemas";
 import { formatJavaScript } from "../../view/codeFormatting";
 import { Await } from "../../types/helpers";
+import { fetchController, FetchGenerator, getJSON } from "../../model/fetching";
 
 export let meta: MetaFunction = () => {
   return {
@@ -59,6 +60,16 @@ function useFetch<Data>(source: URL): null | Data {
 
     return () => controller.abort();
   }, [source.toString()]);
+
+  return data;
+}
+
+function usePromise<Data>(source: Promise<Data>): null | Data {
+  const [data, setData] = useState<Data | null>(null);
+
+  useEffect(() => {
+    source.then(setData);
+  }, [source]);
 
   return data;
 }
@@ -110,16 +121,22 @@ function* SwapiPersonSchema(): SchemaGenerator<SwapiPersonData> {
     mass,
   };
 }
-function* SwapiPersonResource(): SchemaGenerator<SwapiPersonData> {
-  const name: string = yield read.string("name");
-  const height: string = yield read.string("height");
-  const mass: string = yield read.string("mass");
+function* SwapiPersonResource(): FetchGenerator<SwapiPersonData> {
+  const rawData = yield getJSON(new URL(`https://swapi.py4e.com/api/people/1`));
+  
+  const parsedData = parseJSON(rawData, function* Schema() {
+    const name: string = yield read.string("name");
+    const height: string = yield read.string("height");
+    const mass: string = yield read.string("mass");
 
-  return {
-    name,
-    height,
-    mass,
-  };
+    return {
+      name,
+      height,
+      mass: mass,
+    };
+  });
+
+  return parsedData;
 }
 
 export default function MakeRenderer() {
@@ -149,6 +166,9 @@ export default function MakeRenderer() {
   );
   const personData =
     personDataRaw != null ? parseJSON(personDataRaw, SwapiPersonSchema) : null;
+
+  const [personPromise] = useState(() => fetchController(new URL('https://swapi.py4e.com/'), SwapiPersonResource));
+  const personData2 = usePromise(personPromise);
 
   return (
     <main data-measure="center">
@@ -213,6 +233,13 @@ export default function MakeRenderer() {
         <h3>Results</h3>
         <CodeBlock language="json">
           {JSON.stringify(personData, null, 2)}
+        </CodeBlock>
+      </NamedSection>
+
+      <NamedSection id="resource-data" heading={<h2>Resource Data</h2>}>
+        <h3>Results</h3>
+        <CodeBlock language="json">
+          {JSON.stringify(personData2, null, 2)}
         </CodeBlock>
       </NamedSection>
     </main>
