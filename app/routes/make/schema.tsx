@@ -76,6 +76,14 @@ function usePromise<Data>(source: Promise<Data>): null | Data {
   return data;
 }
 
+function useAsyncFunc<Data>(
+  source: () => Promise<Data>,
+  dependencies: Array<any>
+): null | Data {
+  const promise = useMemo(source, dependencies);
+  return usePromise(promise);
+}
+
 interface AWSRegion {
   primary: string;
   secondary: string;
@@ -127,7 +135,7 @@ function* SwapiPersonSchema(): SchemaGenerator<SwapiPersonData> {
   };
 }
 function* SwapiPersonResource() {
-  const rawData: unknown = yield getJSON(new URL(`https://swapi.py4e.com/api/people/1`));
+  const rawData: unknown = yield getJSON('/api/people/1');
   
   const parsedData = parseJSON(rawData, function* Schema() {
     const name: string = yield read.string("name");
@@ -175,11 +183,12 @@ export default function MakeRenderer() {
   const personData =
     personDataRaw != null ? parseJSON(personDataRaw, SwapiPersonSchema) : null;
 
-  const personPromise = useMemo(
-    () => fetchController(new URL("https://swapi.py4e.com/"), SwapiPersonResource),
-    []
-  );
-  const personData2 = usePromise(personPromise);
+  const personData2 = useAsyncFunc(() =>
+    fetchController(
+      new URL("https://swapi.py4e.com/"),
+      SwapiPersonResource
+    ),
+  []);
 
   return (
     <main data-measure="center">
