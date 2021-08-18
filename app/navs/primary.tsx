@@ -24,6 +24,12 @@ export const makeNavItems = (
       <NavLink href="/make/state-machine">{"State machine"}</NavLink>
     </li>
     <li>
+      <NavLink href="/make/sqlite">{"SQLite"}</NavLink>
+    </li>
+    <li>
+      <NavLink href="/make/cli">{"CLI"}</NavLink>
+    </li>
+    <li>
       <NavLink href="/make/multicolored">{"Multicolored components"}</NavLink>
     </li>
   </>

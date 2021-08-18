@@ -1,7 +1,7 @@
 import { useLayoutEffect, useRef } from "react";
 
 export function CodeBlock(props: {
-  language: "json" | "javascript" | "css" | "html" | "objc" | "ruby";
+  language: "json" | "css" | "html" | "sql" | "javascript" | "objc" | "ruby";
   children: string;
   smaller?: true
 }): JSX.Element {
