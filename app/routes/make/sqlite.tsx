@@ -1,6 +1,4 @@
-import { useEffect } from "react";
-import { useLayoutEffect } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LoaderFunction, useRouteData } from "remix";
 import {
   Column,
@@ -13,10 +11,9 @@ import {
   Table,
 } from "../../model/sqlite";
 import { Await, FinalResult } from "../../types/helpers";
-import { ClientModule } from "../../view/clientModule";
+import { useClientScript } from "../../view/clientModule";
 import { CodeBlock } from "../../view/code";
 import { formatJavaScript } from "../../view/codeFormatting";
-import { X } from "../../view/structure";
 
 function* BreakfastFoodsSchema() {
   // const id: unique symbol = yield PrimaryKey(Column("id", "INTEGER"));
@@ -30,14 +27,9 @@ function* BreakfastFoodsSchema() {
   return { id, name, healthyLevel, imageData } as const;
 }
 
-type BreakfastFoodsColumnTypes = FinalResult<ReturnType<typeof BreakfastFoodsSchema>>
-
 const BreakfastFoodsTable = IfNotExists(
   Table("breakfastFoods", BreakfastFoodsSchema)
 );
-// const BreakfastFoodsTable = IfNotExists(
-//   Table("breakfastFoods", BreakfastFoodsSchema)
-// );
 
 export async function loader(args: Parameters<LoaderFunction>[0]) {
   return {
@@ -52,74 +44,92 @@ export async function loader(args: Parameters<LoaderFunction>[0]) {
   };
 }
 
-const clientSource = `
-  console.log(window.initSqlJs);
-  async function main() {
-    const SQL = await window.initSqlJs({ locateFile: file => \`https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.5.0/\${file}\` });
-    const db = new SQL.Database();
-    const binaryArray = db.export();
-    console.log(db.export());
-  }
-  main();
-`;
+function setUpDatabase(database: any) {
+  const breakfastFoodsCreateTableStatement =
+    createTableStatement(BreakfastFoodsTable);
+  database.run(breakfastFoodsCreateTableStatement);
+
+  database.run(
+    ...createInsertArgs(BreakfastFoodsTable, {
+      name: "banana",
+      healthyLevel: 4,
+    })
+  );
+  database.run(
+    ...createInsertArgs(BreakfastFoodsTable, { name: "apple", healthyLevel: 5 })
+  );
+  database.run(
+    ...createInsertArgs(BreakfastFoodsTable, {
+      name: "muesli",
+      healthyLevel: 4,
+    })
+  );
+
+  // database.run(`INSERT INTO breakfastFoods(name) VALUES ("banana");`);
+  // database.run(`INSERT INTO breakfastFoods(name) VALUES ("apple");`);
+  // database.run(`INSERT INTO breakfastFoods(name) VALUES ("muesli");`);
+  const [
+    {
+      values: [[count]],
+    },
+  ] = database.exec(`SELECT COUNT(*) FROM breakfastFoods;`);
+  console.log({ count });
+
+  const all = database.exec(`SELECT * FROM breakfastFoods;`);
+  console.log(all);
+}
 
 export default function MakeSqlite() {
   const data: Await<ReturnType<typeof loader>> = useRouteData();
 
-  const [sqlLoaded, updateSqlLoaded] = useState(false);
   const breakfastFoodsCreateTableStatement =
     createTableStatement(BreakfastFoodsTable);
-  const insertStatement = createInsertStatement(BreakfastFoodsTable, { name: "banana", healthyLevel: 5 });
+  const insertStatement = createInsertStatement(BreakfastFoodsTable, {
+    name: "banana",
+    healthyLevel: 5,
+  });
 
-  useLayoutEffect(() => {
-    const el = (
-      <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.5.0/sql-wasm.min.js"
-        integrity="sha512-l5XgljO54rARJoeqQoY4w0sAJVFd/0GVSvFNtr9YSCSEe+M7Lg0tDw7WQg1J06Mr0/2f9M6ExdHBChwxWammKA=="
-        crossOrigin="anonymous"
-        referrerPolicy="no-referrer"
-      />
-    );
+  const sqlJSRoot = new URL(
+    "https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.5.0/"
+  );
 
-    const script = document.createElement("script");
-    Object.assign(script, el.props);
-    script.addEventListener("load", () => {
-      updateSqlLoaded(true);
-    });
-    document.body.appendChild(script);
-  }, []);
+  const sqlLoaded = useClientScript(
+    <script
+      src={new URL("sql-wasm.min.js", sqlJSRoot).toString()}
+      integrity="sha512-l5XgljO54rARJoeqQoY4w0sAJVFd/0GVSvFNtr9YSCSEe+M7Lg0tDw7WQg1J06Mr0/2f9M6ExdHBChwxWammKA=="
+      crossOrigin="anonymous"
+      referrerPolicy="no-referrer"
+    />
+  );
+  const [database, setDatabase] = useState(null as any);
   useEffect(() => {
     if (sqlLoaded) {
       async function main() {
         const SQL = await (window as any).initSqlJs({
-          locateFile: (file: string) =>
-            `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.5.0/${file}`,
+          locateFile: (file: string) => new URL(file, sqlJSRoot).toString(),
         });
         const db = new SQL.Database();
-        
-        db.run(breakfastFoodsCreateTableStatement);
-
-        db.run(...createInsertArgs(BreakfastFoodsTable, { name: "banana", healthyLevel: 4 }));
-        db.run(...createInsertArgs(BreakfastFoodsTable, { name: "apple", healthyLevel: 5 }));
-        db.run(...createInsertArgs(BreakfastFoodsTable, { name: "muesli", healthyLevel: 4 }));
-
-        // db.run(`INSERT INTO breakfastFoods(name) VALUES ("banana");`);
-        // db.run(`INSERT INTO breakfastFoods(name) VALUES ("apple");`);
-        // db.run(`INSERT INTO breakfastFoods(name) VALUES ("muesli");`);
-        const [{ values: [[count]] }] = db.exec(`SELECT COUNT(*) FROM breakfastFoods;`)
-        console.log({ count });
-
-        const all = db.exec(`SELECT * FROM breakfastFoods;`)
-        console.log(all);
-
-        console.log(db.export());
+        setUpDatabase(db);
+        setDatabase(db);
       }
       main();
     }
   }, [sqlLoaded]);
 
+  function renderQuery(query: string) {
+    if (database == null) return <></>;
+
+    const result = database.exec(query);
+    return (
+      <div>
+        <CodeBlock language="sql">{query}</CodeBlock>
+        <CodeBlock language="json">{JSON.stringify(result, null, 2)}</CodeBlock>
+      </div>
+    );
+  }
+
   return (
-    <main data-measure="center">
+    <main data-measure="wide center">
       <h1>Sqlite</h1>
 
       <div>
@@ -130,12 +140,11 @@ export default function MakeSqlite() {
           <CodeBlock language="sql">
             {breakfastFoodsCreateTableStatement}
           </CodeBlock>
-          <CodeBlock language="sql">
-            {insertStatement}
-          </CodeBlock>
+          <CodeBlock language="sql">{insertStatement}</CodeBlock>
+          {renderQuery("SELECT COUNT(*) FROM breakfastFoods;")}
+          {renderQuery("SELECT * FROM breakfastFoods;")}
         </div>
       </div>
-      {sqlLoaded && <ClientModule source={clientSource} />}
     </main>
   );
 }

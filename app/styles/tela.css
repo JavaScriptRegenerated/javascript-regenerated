@@ -107,6 +107,9 @@ nav {
 [data-measure] {
   max-width: var(--measure);
 }
+[data-measure~="wide"] {
+  --measure: 48rem;
+}
 [data-measure~="center"] {
   margin-left: auto;
   margin-right: auto;

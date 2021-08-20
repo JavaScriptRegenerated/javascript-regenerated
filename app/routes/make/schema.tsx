@@ -18,8 +18,8 @@ import {
 } from "../../model/schemas";
 import { formatJavaScript } from "../../view/codeFormatting";
 import { Await, FinalResult } from "../../types/helpers";
-import { fetchController, FetchGenerator, getJSON } from "../../model/fetching";
-import { useMemo } from "react";
+import { fetchJSONComponent, getJSON } from "../../model/fetching";
+import { useAsyncFunc } from "../../view/async";
 
 export let meta: MetaFunction = () => {
   return {
@@ -64,24 +64,6 @@ function useFetch<Data>(source: URL): null | Data {
   }, [source.toString()]);
 
   return data;
-}
-
-function usePromise<Data>(source: Promise<Data>): null | Data {
-  const [data, setData] = useState<Data | null>(null);
-
-  useEffect(() => {
-    source.then(setData);
-  }, [source]);
-
-  return data;
-}
-
-function useAsyncFunc<Data>(
-  source: () => Promise<Data>,
-  dependencies: Array<any>
-): null | Data {
-  const promise = useMemo(source, dependencies);
-  return usePromise(promise);
 }
 
 interface AWSRegion {
@@ -131,12 +113,12 @@ function* SwapiPersonSchema(): SchemaGenerator<SwapiPersonData> {
     name,
     height,
     mass,
-    films
+    films,
   };
 }
 function* SwapiPersonResource() {
-  const rawData: unknown = yield getJSON('/api/people/1');
-  
+  const rawData: unknown = yield getJSON("/api/people/1");
+
   const parsedData = parseJSON(rawData, function* Schema() {
     const name: string = yield read.string("name");
     const height: string = yield read.string("height");
@@ -147,15 +129,15 @@ function* SwapiPersonResource() {
       name,
       height,
       mass,
-      films
+      films,
     };
   });
 
   return parsedData;
 }
-type SwapiPersonData2 = FinalResult<ReturnType<typeof SwapiPersonResource>>
+type SwapiPersonData2 = FinalResult<ReturnType<typeof SwapiPersonResource>>;
 
-export default function MakeRenderer() {
+export default function MakeSchema() {
   const data: Await<ReturnType<typeof loader>> = useRouteData();
 
   function renderExample(input: any): JSX.Element {
@@ -183,12 +165,13 @@ export default function MakeRenderer() {
   const personData =
     personDataRaw != null ? parseJSON(personDataRaw, SwapiPersonSchema) : null;
 
-  const personData2 = useAsyncFunc(() =>
-    fetchController(
-      new URL("https://swapi.py4e.com/"),
-      SwapiPersonResource
-    ),
-  []);
+  const personData2 = useAsyncFunc(
+    () =>
+      fetchJSONComponent(SwapiPersonResource, {
+        baseURL: new URL("https://swapi.py4e.com/"),
+      }),
+    []
+  );
 
   return (
     <main data-measure="center">

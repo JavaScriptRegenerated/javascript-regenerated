@@ -18,9 +18,9 @@ export type FetchGenerator<Result> = Generator<
   FetchReply | undefined
 >;
 
-export async function fetchController<Result>(
-  baseURL: URL,
-  generator: () => FetchGenerator<Result>
+export async function fetchJSONComponent<Result>(
+  generator: () => FetchGenerator<Result>,
+  options: { baseURL?: URL } = {}
 ) {
   const gen = generator();
   let reply: FetchReply | undefined;
@@ -34,7 +34,7 @@ export async function fetchController<Result>(
     reply = undefined;
 
     if (result.value.type === identifiers.getJSON) {
-      const url = new URL(result.value.url, baseURL);
+      const url = new URL(result.value.url, options.baseURL);
       const data = fetch(url.toString()).then(res => res.json());
       reply = await data;
     }

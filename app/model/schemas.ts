@@ -1,6 +1,7 @@
 export const types = {
   string: "string",
   number: "number",
+  boolean: "boolean",
   array: "array",
 } as const;
 
@@ -18,7 +19,17 @@ function readNumber(name: string) {
   };
 }
 
-function readArray(name: string, itemType: typeof types.string | typeof types.number) {
+function readBoolean(name: string) {
+  return {
+    type: types.boolean,
+    name,
+  };
+}
+
+function readArray(
+  name: string,
+  itemType: typeof types.string | typeof types.number
+) {
   return {
     type: types.array,
     name,
@@ -29,16 +40,17 @@ function readArray(name: string, itemType: typeof types.string | typeof types.nu
 export const read = {
   string: readString,
   number: readNumber,
+  boolean: readBoolean,
   array: readArray,
 };
 
 export type SchemaMessagePrimitive = ReturnType<
-  typeof readString | typeof readNumber
+  typeof readString | typeof readNumber | typeof readBoolean
 >;
-export type SchemaMessage = ReturnType<
-  typeof readString | typeof readNumber | typeof readArray
->;
-export type SchemaReply = string | number;
+export type SchemaMessage =
+  | SchemaMessagePrimitive
+  | ReturnType<typeof readArray>;
+export type SchemaReply = string | number | boolean;
 // export type SchemaGenerator<Result> = Generator<ReturnType<typeof read.string>, Result, string> | Generator<ReturnType<typeof read.number>, Result, number>;
 export type SchemaGenerator<Result> = Generator<
   SchemaMessage,
@@ -70,10 +82,16 @@ export function parseJSON<Result>(
         if (typeof (source as any)[result.value.name] === "number") {
           reply = (source as any)[result.value.name];
         }
+      } else if (result.value.type === types.boolean) {
+        if (typeof (source as any)[result.value.name] === "boolean") {
+          reply = (source as any)[result.value.name];
+        }
       } else if (result.value.type === types.array) {
         const itemType = result.value.itemType;
         if (Array.isArray((source as any)[result.value.name])) {
-          const sanitizedItems = (source as any)[result.value.name].map((x: any) => typeof x === itemType ? x : null);
+          const sanitizedItems = (source as any)[result.value.name].map(
+            (x: any) => (typeof x === itemType ? x : null)
+          );
           reply = sanitizedItems;
         }
       }
@@ -105,5 +123,6 @@ export function parseFormData<Result>(
         reply = parseFloat(source.get(result.value.name) as string);
       }
     }
+    // TODO: handle boolean
   }
 }

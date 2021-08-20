@@ -53,6 +53,8 @@ function Document({ children }: { children: React.ReactNode }) {
       if (nextItem != null) {
         nextItem.querySelector("a")?.click();
       }
+    } else if (e.key === "z") {
+      document.documentElement.classList.toggle('zoomed');
     }
   }
 

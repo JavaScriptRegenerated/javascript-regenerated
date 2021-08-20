@@ -16,9 +16,12 @@
 
   --bg: #00151C;
 
-  font-size: 200%;
+  font-size: 125%;
   color: #D9FFFF;
   background-color: var(--bg);
+}
+:root.zoomed {
+  font-size: 200%;
   zoom: 175%;
 }
 body {
