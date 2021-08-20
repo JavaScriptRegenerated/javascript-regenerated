@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { render } from "react-dom";
 import { fetchJSONComponent, getJSON } from "../../model/fetching";
 import { parseFormData, parseJSON, read } from "../../model/schemas";
 import { useAsyncFunc } from "../../view/async";
@@ -42,14 +41,8 @@ export default function MakeFetchHappen() {
   const [packageName, updatePackageName] = useState("react");
 
   const bundlephobiaData = useAsyncFunc(
-    () =>
-      fetchJSONComponent(
-        BundlePhobiaAPI.bind(null, packageName),
-        // function* () {
-        //   return yield* BundlePhobiaAPI(packageName);
-        // },
-        { baseURL: new URL("https://swapi.py4e.com/") }
-      ),
+    (signal) =>
+      fetchJSONComponent(BundlePhobiaAPI.bind(null, packageName), { signal }),
     [packageName]
   );
 

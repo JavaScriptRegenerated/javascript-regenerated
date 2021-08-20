@@ -1,20 +1,19 @@
-import { useEffect, useMemo, useState } from "react";
-
-export function usePromise<Data>(source: Promise<Data>): null | Data {
-  const [data, setData] = useState<Data | null>(null);
-
-  useEffect(() => {
-    setData(null);
-    source.then(setData);
-  }, [source]);
-
-  return data;
-}
+import { useEffect, useState } from "react";
 
 export function useAsyncFunc<Data>(
-  source: () => Promise<Data>,
+  source: (signal: AbortSignal) => Promise<Data>,
   dependencies: Array<any>
 ): null | Data {
-  const promise = useMemo(source, dependencies);
-  return usePromise(promise);
+  const [data, setData] = useState<Data | null>(null);
+  
+  useEffect(() => {
+    const aborter = new AbortController();
+    
+    setData(null);
+    source(aborter.signal).then(setData);
+
+    return () => aborter.abort();
+  }, dependencies);
+
+  return data;
 }
