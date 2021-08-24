@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { fetchJSONComponent, getJSON } from "../../model/fetching";
+import { fetchComponent, getJSON } from "../../model/fetching";
 import { parseFormData, parseJSON, read } from "../../model/schemas";
 import { useAsyncFunc } from "../../view/async";
 import { CodeBlock } from "../../view/code";
@@ -42,7 +42,7 @@ export default function MakeFetchHappen() {
 
   const bundlephobiaData = useAsyncFunc(
     (signal) =>
-      fetchJSONComponent(BundlePhobiaAPI.bind(null, packageName), { signal }),
+      fetchComponent(BundlePhobiaAPI.bind(null, packageName), { signal }),
     [packageName]
   );
 

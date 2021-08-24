@@ -18,7 +18,7 @@ import {
 } from "../../model/schemas";
 import { formatJavaScript } from "../../view/codeFormatting";
 import { Await, FinalResult } from "../../types/helpers";
-import { fetchJSONComponent, getJSON } from "../../model/fetching";
+import { fetchComponent, getJSON } from "../../model/fetching";
 import { useAsyncFunc } from "../../view/async";
 
 export let meta: MetaFunction = () => {
@@ -167,7 +167,7 @@ export default function MakeSchema() {
 
   const personData2 = useAsyncFunc(
     () =>
-      fetchJSONComponent(SwapiPersonResource, {
+      fetchComponent(SwapiPersonResource, {
         baseURL: new URL("https://swapi.py4e.com/"),
       }),
     []

@@ -18,7 +18,7 @@ export type FetchGenerator<Result> = Generator<
   FetchReply | undefined
 >;
 
-export async function fetchJSONComponent<Result>(
+export async function fetchComponent<Result>(
   generator: () => FetchGenerator<Result>,
   options: { baseURL?: URL, signal?: AbortSignal } = {}
 ) {
