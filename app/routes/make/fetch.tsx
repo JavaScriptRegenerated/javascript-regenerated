@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { fetchComponent, getJSON } from "../../model/fetching";
+import { fetchComponent, getJSON, postJSON } from "../../model/fetching";
 import { parseFormData, parseJSON, read } from "../../model/schemas";
-import { useAsyncFunc } from "../../view/async";
+import { useAsyncAction, useAsyncFunc } from "../../view/async";
 import { CodeBlock } from "../../view/code";
 import { NamedSection } from "../../view/semantics";
 
@@ -37,13 +37,47 @@ function* BundlePhobiaFormSchema() {
   };
 }
 
+const publicStoreURL = new URL("https://public-store.collected.workers.dev");
+function* PublicStoreListItems() {
+  const rawData: unknown = yield getJSON(new URL("/items", publicStoreURL));
+
+  return parseJSON(rawData, function* Schema() {
+    const result: string[] = yield read.array("result", "string");
+    return result;
+  });
+}
+function* PublicStoreCreateItem() {
+  const rawData: unknown = yield postJSON(new URL("/items", publicStoreURL));
+
+  return parseJSON(rawData, function* Schema() {
+    const result: number = yield read.number("result");
+    return result;
+  });
+}
+function* PublicStoreDeleteItems() {
+  yield postJSON(new URL("/items", publicStoreURL));
+}
+
 export default function MakeFetchHappen() {
   const [packageName, updatePackageName] = useState("react");
 
-  const bundlephobiaData = useAsyncFunc(
+  const [bundlephobiaData] = useAsyncFunc(
     (signal) =>
       fetchComponent(BundlePhobiaAPI.bind(null, packageName), { signal }),
     [packageName]
+  );
+
+  const [performCreate, createResult] = useAsyncAction((signal) =>
+    fetchComponent(PublicStoreCreateItem, { signal })
+  );
+  const [performDelete, deleteResult] = useAsyncAction((signal) =>
+    fetchComponent(PublicStoreDeleteItems, { signal })
+  );
+  console.log(createResult);
+
+  const [listData] = useAsyncFunc(
+    (signal) => fetchComponent(PublicStoreListItems, { signal }),
+    [createResult.completedCount, deleteResult.completedCount]
   );
 
   return (
@@ -76,6 +110,22 @@ export default function MakeFetchHappen() {
         ) : (
           <CodeBlock language="json">
             {JSON.stringify(bundlephobiaData, null, 2)}
+          </CodeBlock>
+        )}
+      </NamedSection>
+
+      <NamedSection id="list" heading={<h2>List</h2>}>
+        <button type="button" onClick={performCreate}>
+          Add Random Item
+        </button>
+        <button type="button" onClick={performDelete}>
+          Delete Items
+        </button>
+        {listData == null ? (
+          <div>Loading…</div>
+        ) : (
+          <CodeBlock language="json">
+            {JSON.stringify(listData, null, 2)}
           </CodeBlock>
         )}
       </NamedSection>
