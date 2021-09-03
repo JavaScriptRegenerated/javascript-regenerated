@@ -22,16 +22,16 @@ export function postJSON(
   });
 }
 
-export function deleteJSON(
-  url: string | URL,
-) {
+export function deleteJSON(url: string | URL) {
   return Object.freeze({
     type: identifiers.deleteJSON,
     url: url.toString(),
   });
 }
 
-export type FetchMessage = ReturnType<typeof getJSON | typeof postJSON | typeof deleteJSON>;
+export type FetchMessage = ReturnType<
+  typeof getJSON | typeof postJSON | typeof deleteJSON
+>;
 export type FetchReply = any;
 
 export type FetchGenerator<Result> = Generator<
@@ -63,16 +63,18 @@ export async function fetchComponent<Result>(
       reply = await data;
     } else if (result.value.type === identifiers.postJSON) {
       const url = new URL(result.value.url, options.baseURL);
+      console.log("POSTING!");
       const data = fetch(url.toString(), {
-        method: "POST",
+        method: "post",
         body: result.value.body,
         signal: options.signal,
       }).then((res) => res.json());
       reply = await data;
     } else if (result.value.type === identifiers.deleteJSON) {
       const url = new URL(result.value.url, options.baseURL);
+      console.log("DELETEING!");
       const data = fetch(url.toString(), {
-        method: "DELETE",
+        method: "delete",
         signal: options.signal,
       }).then((res) => res.json());
       reply = await data;

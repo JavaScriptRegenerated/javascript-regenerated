@@ -1,5 +1,10 @@
 import { useState } from "react";
-import { fetchComponent, getJSON, postJSON } from "../../model/fetching";
+import {
+  deleteJSON,
+  fetchComponent,
+  getJSON,
+  postJSON,
+} from "../../model/fetching";
 import { parseFormData, parseJSON, read } from "../../model/schemas";
 import { useAsyncAction, useAsyncFunc } from "../../view/async";
 import { CodeBlock } from "../../view/code";
@@ -55,7 +60,7 @@ function* PublicStoreCreateItem() {
   });
 }
 function* PublicStoreDeleteItems() {
-  yield postJSON(new URL("/items", publicStoreURL));
+  yield deleteJSON(new URL("/items", publicStoreURL));
 }
 
 export default function MakeFetchHappen() {
@@ -119,10 +124,10 @@ export default function MakeFetchHappen() {
           Add Random Item
         </button>
         <button type="button" onClick={performDelete}>
-          Delete Items
+          Delete All Items
         </button>
         {listData == null ? (
-          <div>Loading…</div>
+          <div data-p="1">Loading…</div>
         ) : (
           <CodeBlock language="json">
             {JSON.stringify(listData, null, 2)}
