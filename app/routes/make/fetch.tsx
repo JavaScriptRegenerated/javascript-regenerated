@@ -46,18 +46,22 @@ const publicStoreURL = new URL("https://public-store.collected.workers.dev");
 function* PublicStoreListItems() {
   const rawData: unknown = yield getJSON(new URL("/items", publicStoreURL));
 
-  return parseJSON(rawData, function* Schema() {
-    const result: string[] = yield read.array("result", "string");
-    return result;
-  });
+  return rawData;
+
+  // return parseJSON(rawData, function* Schema() {
+  //   const result: string[] = yield read.array("result", "string");
+  //   return result;
+  // });
 }
 function* PublicStoreCreateItem() {
   const rawData: unknown = yield postJSON(new URL("/items", publicStoreURL));
 
-  return parseJSON(rawData, function* Schema() {
-    const result: number = yield read.number("result");
-    return result;
-  });
+  // return parseJSON(rawData, [
+  //   read.object(function* Schema() {
+  //     const result: number = yield read.number("result");
+  //     return result;
+  //   }),
+  // ]);
 }
 function* PublicStoreDeleteItems() {
   yield deleteJSON(new URL("/items", publicStoreURL));
