@@ -107,7 +107,7 @@ function* SwapiPersonSchema(): SchemaGenerator<SwapiPersonData> {
   const name: string = yield read.string("name");
   const height: string = yield read.string("height");
   const mass: string = yield read.string("mass");
-  const films: string[] = yield read.array("films", types.string);
+  const films: string[] = yield read.array("films", read.string());
 
   return {
     name,
@@ -123,7 +123,7 @@ function* SwapiPersonResource() {
     const name: string = yield read.string("name");
     const height: string = yield read.string("height");
     const mass: string = yield read.string("mass");
-    const films: string[] = yield read.array("films", types.string);
+    const films: string[] = yield read.array("films", read.string());
 
     return {
       name,
