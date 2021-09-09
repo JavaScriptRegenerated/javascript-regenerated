@@ -78,7 +78,7 @@ const htmlString = Array.from(generator).join("");
         <CodeBlock language="javascript" smaller>
           {`
 const generator = processHTML(HTMLComponent);
-const sream = new ReadableStream({
+const stream = new ReadableStream({
   pull(controller) {
     const { value, done } = generator.next();
 
