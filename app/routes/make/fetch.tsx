@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   deleteJSON,
   fetchComponent,
@@ -65,6 +65,53 @@ function* PublicStoreCreateItem() {
 }
 function* PublicStoreDeleteItems() {
   yield deleteJSON(new URL("/items", publicStoreURL));
+}
+
+function MakeStreamItems() {
+  type Status = "initial" | "connecting" | "open" | "closed";
+
+  const [items, updateItems] = useState<Array<number>>([]);
+  const [status, updateStatus] = useState<Status>("initial");
+
+  useEffect(() => {
+    const stream = new EventSource(
+      new URL("/items/event-stream", publicStoreURL).toString()
+    );
+
+    updateStatus("connecting");
+
+    stream.addEventListener("open", () => {
+      updateStatus("open");
+    });
+
+    stream.addEventListener("error", (event) => {
+      console.log(event, stream.readyState, (event.target as EventSource).readyState);
+
+      stream.close();
+      // if (stream.readyState == EventSource.CLOSED) {
+        updateStatus("closed");
+      // }
+    });
+
+    stream.addEventListener("message", (event) => {
+      updateItems((items) => items.concat(event.data));
+    });
+
+    return () => {
+      stream.close();
+    };
+  }, []);
+
+  return (
+    <>
+      <output>{status}</output>
+      <ul>
+        {items.map((item, index) => (
+          <li key={index}>{item}</li>
+        ))}
+      </ul>
+    </>
+  );
 }
 
 export default function MakeFetchHappen() {
@@ -137,6 +184,10 @@ export default function MakeFetchHappen() {
             {JSON.stringify(listData, null, 2)}
           </CodeBlock>
         )}
+      </NamedSection>
+
+      <NamedSection id="event-stream" heading={<h2>Event Stream</h2>}>
+        <MakeStreamItems />
       </NamedSection>
     </main>
   );
