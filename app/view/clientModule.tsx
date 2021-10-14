@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { useLayoutEffect } from "react";
+import { useEffect, useState } from "react";
 
 export function ClientModule({ source }: { source: string }): JSX.Element {
   return <script type="module" dangerouslySetInnerHTML={{ __html: source }} />;
@@ -8,7 +7,7 @@ export function ClientModule({ source }: { source: string }): JSX.Element {
 export function useClientScript(scriptEl: JSX.Element) {
   const [loaded, updateLoaded] = useState(false);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const script = document.createElement("script");
     Object.assign(script, scriptEl.props);
     script.addEventListener("load", () => {

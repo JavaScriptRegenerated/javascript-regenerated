@@ -42,6 +42,12 @@ function* BundlePhobiaFormSchema() {
   };
 }
 
+function* GetGitHubRateLimit() {
+  const rawData: unknown = yield getJSON(new URL("https://api.github.com/rate_limit"));
+
+  
+}
+
 const publicStoreURL = new URL("https://public-store.collected.workers.dev");
 function* PublicStoreListItems() {
   const rawData: unknown = yield getJSON(new URL("/items", publicStoreURL));
@@ -67,7 +73,7 @@ function* PublicStoreDeleteItems() {
   yield deleteJSON(new URL("/items", publicStoreURL));
 }
 
-function MakeStreamItems() {
+function MakeStreamItemsA() {
   type Status = "initial" | "connecting" | "open" | "closed";
 
   const [items, updateItems] = useState<Array<number>>([]);
@@ -187,7 +193,7 @@ export default function MakeFetchHappen() {
       </NamedSection>
 
       <NamedSection id="event-stream" heading={<h2>Event Stream</h2>}>
-        <MakeStreamItems />
+        <MakeStreamItemsA />
       </NamedSection>
     </main>
   );

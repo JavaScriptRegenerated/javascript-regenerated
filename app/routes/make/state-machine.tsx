@@ -1,15 +1,13 @@
-import type { MetaFunction, LinksFunction, LoaderFunction } from "remix";
+import "regenerator-runtime/runtime"; // Would love to get rid of this but yieldmachine currently builds for it.
+import { MetaFunction, LinksFunction, LoaderFunction, useRouteData } from "remix";
 import { X, Y } from "../../view/structure";
 import { NamedSection } from "../../view/semantics";
 import { CodeBlock } from "../../view/code";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useEffect } from "react";
-import {
-  parseFormData,
-  parseJSON,
-  read,
-  SchemaGenerator,
-} from "../../model/schemas";
+import { accumulate, compound, listenTo, on, start } from "yieldmachine";
+import { formatJavaScript } from "../../view/codeFormatting";
+import { Await } from "../../types/helpers";
 
 export let meta: MetaFunction = () => {
   return {
@@ -22,14 +20,86 @@ export let links: LinksFunction = () => {
   return [];
 };
 
-export let loader: LoaderFunction = async () => {
-  return {};
-};
+export async function loader(args: Parameters<LoaderFunction>[0]) {
+  return {
+    source: {
+      machines: {
+        EventSourceMachine: formatJavaScript(EventSourceMachine.toString()),
+      },
+      components: {},
+      functions: {},
+    },
+  };
+}
+
+const messagesKey = Symbol("messages");
+
+function* EventSourceMachine(eventTarget: EventTarget) {
+  // yield on(new Map([["type", "error"], ["readyState", EventSource.CLOSED]]), Closed);
+  yield listenTo(eventTarget, "error");
+  yield on("error", compound(Closed));
+
+  function* Open() {
+    yield listenTo(eventTarget, "message");
+    yield accumulate("message", messagesKey);
+  }
+  function* Closed() {}
+
+  return function* Connecting() {
+    yield listenTo(eventTarget, "open");
+    yield on("open", Open);
+  };
+}
+
+const publicStoreURL = new URL("https://public-store.collected.workers.dev");
+
+function MakeStreamItems() {
+  const [currentState, updateCurrentState] = useState("");
+  const [changeCount, updateChangeCount] = useState(0);
+  const [items, updateItems] = useState<Array<unknown>>(() => []);
+
+  useEffect(() => {
+    const eventSource = new EventSource(
+      new URL("/items/event-stream", publicStoreURL).toString()
+    );
+    const machine = start(EventSourceMachine.bind(null, eventSource));
+
+    machine.signal.addEventListener("StateChanged", () => {
+      console.log("state changed", machine.current);
+      updateCurrentState(machine.current as string);
+      updateChangeCount(machine.changeCount);
+    });
+    machine.signal.addEventListener("AccumulationsChanged", () => {
+      console.log("accumulations changed", machine.accumulations);
+      updateItems(machine.accumulations.get(messagesKey) ?? []);
+    });
+  }, []);
+
+  return (
+    <>
+      <output>
+        {currentState} ({changeCount})
+      </output>
+      <ul>
+        {items.map((item, index) => (
+          <li key={index}>{JSON.stringify(item.data)}</li>
+        ))}
+      </ul>
+    </>
+  );
+}
 
 export default function MakeStateMachine() {
+  const data: Await<ReturnType<typeof loader>> = useRouteData();
+
   return (
     <main data-measure="center">
       <h1>State Machine</h1>
+
+      <MakeStreamItems />
+      <CodeBlock language="javascript">
+        {data.source.machines.EventSourceMachine}
+      </CodeBlock>
 
       <h2>State machine components</h2>
       <CodeBlock language="javascript">{`
