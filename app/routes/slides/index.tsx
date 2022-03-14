@@ -1,5 +1,5 @@
 import type { MetaFunction, LinksFunction, LoaderFunction } from "remix";
-import { useRouteData } from "remix";
+import { useLoaderData } from "remix";
 
 export let meta: MetaFunction = () => {
   return {
@@ -17,7 +17,7 @@ export let loader: LoaderFunction = async () => {
 };
 
 export default function Index() {
-  let data = useRouteData();
+  let data = useLoaderData();
 
   return (
     <main data-measure="center">

@@ -1,4 +1,4 @@
-import { useRouteData } from "remix";
+import { useLoaderData } from "remix";
 
 export function fetchGitHubIcon(repo: string, version: string, path: string) {
   return fetch(`https://cdn.jsdelivr.net/gh/${repo}@${version}${path}`, {
@@ -59,7 +59,7 @@ export function LoadedIcon<Name extends string>({
   color,
   ...rest
 }: LoadedIconProps<Name>) {
-  const { icons } = useRouteData();
+  const { icons } = useLoaderData();
 
   return <svg {...rest} dangerouslySetInnerHTML={{ __html: icons[name] }} style={color != null ? { color } : undefined} />;
 }

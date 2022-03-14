@@ -1,5 +1,5 @@
 import type { MetaFunction, LinksFunction, LoaderFunction } from "remix";
-import { useRouteData } from "remix";
+import { useLoaderData } from "remix";
 import { countByteSize } from "../../model/bytes";
 import { HTML, processHTML } from "../../model/rendering";
 import { Await } from "../../types/helpers";
@@ -37,7 +37,7 @@ export async function loader(args: Parameters<LoaderFunction>[0]) {
 }
 
 export default function MakeRenderer() {
-  let data: Await<ReturnType<typeof loader>> = useRouteData();
+  let data: Await<ReturnType<typeof loader>> = useLoaderData();
 
   const htmlOutput = Array.from(processHTML(HTMLComponent)).join("");
 

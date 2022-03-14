@@ -1,6 +1,6 @@
 import type { MetaFunction, LinksFunction, LoaderFunction } from "remix";
 import { Link, Outlet } from "react-router-dom";
-import { useRouteData } from "remix";
+import { useLoaderData } from "remix";
 import { makeNavItems } from "../navs/primary";
 
 export let meta: MetaFunction = () => {
@@ -19,7 +19,7 @@ export let loader: LoaderFunction = async () => {
 };
 
 export default function Index() {
-  let data = useRouteData();
+  let data = useLoaderData();
 
   return (
     <>

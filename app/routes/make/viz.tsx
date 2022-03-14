@@ -1,10 +1,5 @@
 import { MetaFunction, LinksFunction, LoaderFunction, useLoaderData } from "remix";
-import { X, Y } from "../../view/structure";
-import { NamedSection } from "../../view/semantics";
 import { CodeBlock } from "../../view/code";
-import { useMemo, useState } from "react";
-import { useEffect } from "react";
-import { accumulate, compound, listenTo, on, start } from "yieldmachine";
 import { formatJavaScript } from "../../view/codeFormatting";
 import { Await } from "../../types/helpers";
 
@@ -34,61 +29,10 @@ export async function loader(args: Parameters<LoaderFunction>[0]) {
 const messagesKey = Symbol("messages");
 
 function* EventSourceMachine(eventTarget: EventTarget) {
-  // yield on(new Map([["type", "error"], ["readyState", EventSource.CLOSED]]), Closed);
-  yield listenTo(eventTarget, "error");
-  yield on("error", compound(Closed));
-
-  function* Open() {
-    yield listenTo(eventTarget, "message");
-    yield accumulate("message", messagesKey);
-  }
-  function* Closed() {}
-
-  return function* Connecting() {
-    yield listenTo(eventTarget, "open");
-    yield on("open", Open);
-  };
+  
 }
 
-const publicStoreURL = new URL("https://public-store.collected.workers.dev");
-
-function MakeStreamItems() {
-  const [currentState, updateCurrentState] = useState("");
-  const [changeCount, updateChangeCount] = useState(0);
-  const [items, updateItems] = useState<Array<unknown>>(() => []);
-
-  useEffect(() => {
-    const eventSource = new EventSource(
-      new URL("/items/event-stream", publicStoreURL).toString()
-    );
-    const machine = start(EventSourceMachine.bind(null, eventSource));
-
-    machine.signal.addEventListener("StateChanged", () => {
-      console.log("state changed", machine.current);
-      updateCurrentState(machine.current as string);
-      updateChangeCount(machine.changeCount);
-    });
-    machine.signal.addEventListener("AccumulationsChanged", () => {
-      console.log("accumulations changed", machine.accumulations);
-      updateItems(machine.accumulations.get(messagesKey) ?? []);
-    });
-  }, []);
-
-  return (
-    <>
-      <output>
-        {currentState} ({changeCount})
-      </output>
-      <ul>
-        {items.map((item, index) => (
-          <li key={index}>{JSON.stringify(item.data)}</li>
-        ))}
-      </ul>
-    </>
-  );
-}
-
-export default function MakeStateMachine() {
+export default function MakeViz() {
   const data: Await<ReturnType<typeof loader>> = useLoaderData();
 
   return (

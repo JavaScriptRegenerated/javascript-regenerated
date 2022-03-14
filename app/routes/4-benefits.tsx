@@ -1,6 +1,6 @@
 import type { MetaFunction, LinksFunction, LoaderFunction } from "remix";
 import * as React from "react";
-import { useRouteData } from "remix";
+import { useLoaderData } from "remix";
 import {
   loadHeroIcons,
   loadSimpleIcons,

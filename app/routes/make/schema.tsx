@@ -2,7 +2,7 @@ import {
   MetaFunction,
   LinksFunction,
   LoaderFunction,
-  useRouteData,
+  useLoaderData,
 } from "remix";
 import { X, Y } from "../../view/structure";
 import { NamedSection } from "../../view/semantics";
@@ -138,7 +138,7 @@ function* SwapiPersonResource() {
 type SwapiPersonData2 = FinalResult<ReturnType<typeof SwapiPersonResource>>;
 
 export default function MakeSchema() {
-  const data: Await<ReturnType<typeof loader>> = useRouteData();
+  const data: Await<ReturnType<typeof loader>> = useLoaderData();
 
   function renderExample(input: any): JSX.Element {
     const result = parseJSON(input, AWSRegionSchema);

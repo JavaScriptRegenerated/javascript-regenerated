@@ -1,6 +1,6 @@
 import type { MetaFunction, LinksFunction, LoaderFunction } from "remix";
 import { Link } from "remix";
-import { useRouteData } from "remix";
+import { useLoaderData } from "remix";
 import { PrimaryNavigation } from "../navs/primary";
 
 import stylesUrl from "../styles/index.css";

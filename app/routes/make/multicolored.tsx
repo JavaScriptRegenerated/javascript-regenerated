@@ -1,5 +1,5 @@
 import type { MetaFunction, LinksFunction, LoaderFunction } from "remix";
-import { useRouteData } from "remix";
+import { useLoaderData } from "remix";
 import { countByteSize } from "../../model/bytes";
 import {
   HTML,
@@ -81,7 +81,7 @@ function validateLinks(links: Iterable<string>): Set<string> {
 }
 
 export default function MulticoloredComponentsPage() {
-  let data: Await<ReturnType<typeof loader>> = useRouteData();
+  let data: Await<ReturnType<typeof loader>> = useLoaderData();
 
   const toString = (iteratable: Iterable<string>) =>
     Array.from(iteratable).join("");

@@ -1,5 +1,5 @@
 import type { MetaFunction, LinksFunction, LoaderFunction } from "remix";
-import { useRouteData } from "remix";
+import { useLoaderData } from "remix";
 import {
     Disabled,
   Textbox,
@@ -39,7 +39,7 @@ export async function loader(args: Parameters<LoaderFunction>[0]) {
 }
 
 export default function MakeRenderer() {
-  const data: Await<ReturnType<typeof loader>> = useRouteData();
+  const data: Await<ReturnType<typeof loader>> = useLoaderData();
 
   const outputHTML = Array.from(processHTML(HTMLComponent)).join("");
   const outputJAWS = Array.from(previewJAWS(HTMLComponent)).join("\n");

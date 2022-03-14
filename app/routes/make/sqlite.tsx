@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { LoaderFunction, useRouteData } from "remix";
+import { LoaderFunction, useLoaderData } from "remix";
 import {
   Column,
   createInsertArgs,
@@ -80,7 +80,7 @@ function setUpDatabase(database: any) {
 }
 
 export default function MakeSqlite() {
-  const data: Await<ReturnType<typeof loader>> = useRouteData();
+  const data: Await<ReturnType<typeof loader>> = useLoaderData();
 
   const breakfastFoodsCreateTableStatement =
     createTableStatement(BreakfastFoodsTable);
